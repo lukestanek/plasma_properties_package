@@ -1,0 +1,458 @@
+<!-- 
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>plasma_properties module &mdash; Plasma Properties  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="sm_transport" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Plasma Properties
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">sm_transport</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">plasma_properties module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Plasma Properties</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">sm_transport</a> &raquo;</li>
+        
+      <li>plasma_properties module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/plasma_properties.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-plasma_properties">
+<span id="plasma-properties-module"></span><h1>plasma_properties module<a class="headerlink" href="#module-plasma_properties" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="plasma_properties.multi_species_trans">
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.</code><code class="sig-name descname">multi_species_trans</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_densities</em>, <em class="sig-param">Ts</em>, <em class="sig-param">Zs</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="plasma_properties.multi_species_trans.Knm">
+<code class="sig-name descname">Knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans.Knm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>float</em><em> or </em><em>array_like</em>) – Plasma parameter (eq. 54 from [1])</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Subscript for collision intergral Knm (eq. C22 from [1])</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Subscript for collision integral Knm (eq. C22 from [1])</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Knm</strong> – Fit to collision integral (eqs. C22-C24 from [1])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.multi_species_trans.TF_Zbar">
+<code class="sig-name descname">TF_Zbar</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans.TF_Zbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thomas Fermi Zbar model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>int</em>) – Atomic number.</p></li>
+<li><p><strong>ni</strong> (<em>float</em>) – Number density in units particles per
+cubic centimeter [N/cc].</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Finite Temperature Thomas Fermi Charge State using
+R.M. More, “Pressure Ionization, Resonances, and the
+Continuity of Bound and Free States”, Adv. in Atomic
+Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.multi_species_trans.inter_diffusion">
+<code class="sig-name descname">inter_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans.inter_diffusion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="plasma_properties.sm_transport">
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.</code><code class="sig-name descname">sm_transport</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generate the Stanton and Murillo transport coefficients.</p>
+<p class="rubric">References</p>
+<p>Stanton, Liam G., and Michael S. Murillo.
+“Ionic transport in high-energy-density matter.”
+Physical Review E 93.4 (2016): 043203.</p>
+<dl class="method">
+<dt id="plasma_properties.sm_transport.Knm">
+<code class="sig-name descname">Knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.Knm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> (<em>float</em><em> or </em><em>array_like</em>) – Plasma parameter (eq. 54 from [1])</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – Subscript for collision intergral Knm (eq. C22 from [1])</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Subscript for collision integral Knm (eq. C22 from [1])</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>Knm</strong> – Fit to collision integral (eqs. C22-C24 from [1])</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.sm_transport.TF_Zbar">
+<code class="sig-name descname">TF_Zbar</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.TF_Zbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thomas Fermi Zbar model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>int</em>) – Atomic number.</p></li>
+<li><p><strong>ni</strong> (<em>float</em>) – Number density in units particles per
+cubic centimeter [N/cc].</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Finite Temperature Thomas Fermi Charge State using
+R.M. More, “Pressure Ionization, Resonances, and the
+Continuity of Bound and Free States”, Adv. in Atomic
+Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.sm_transport.plasma_params">
+<code class="sig-name descname">plasma_params</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em>, <em class="sig-param">mi</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.plasma_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>int</em>) – Atomic number</p></li>
+<li><p><strong>ni</strong> (<em>float</em>) – Number density [1/cc]</p></li>
+<li><p><strong>mi</strong> (<em>float</em>) – Atomic mass [g]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.sm_transport.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em>, <em class="sig-param">xaxis='temeprature'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Very rough preliminary plotting method…. in development.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.sm_transport.self_diffusion">
+<code class="sig-name descname">self_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.self_diffusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the self-diffusion coefficient using eq. 56 from [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>D</strong> – Self-diffusion coefficients for system parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float or array_like</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The structure in which D is returned is in the form of a 3D array (1D if single value inputs).
+The first axis corresponds to density, the second is temperature, and the third is atomic number.</p>
+</div>
+<p class="rubric">Example</p>
+<p>Single value input:</p>
+<p>Am = 1.9944235e-23 # g</p>
+<p>rho = 1 # g/cc</p>
+<p>T = 0.5 # eV</p>
+<p>Z = 6</p>
+<p>D[0] returns the self-diffusion coefficient for T = 0.5 eV, rho = 1 g/cc, and Z = 6.</p>
+<p>Range of inputs:
+Am = np.array([1.6735575e-24, 1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # g
+rho = np.array([1, 10, 100]) # g/cc
+T = np.array([0.1, 1, 10, 100]) # eV
+Z = np.array([1, 6, 13, 23])</p>
+<p>D[0,1,3] returns the self-diffusion coefficient corresponding to the zeroth (python indexing)
+mass density in your input array (in this 1 g/cc), the first temperature of your
+T array (T = 1 eV), and the third entry in your Z array (Z = 23 for vanadium).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.sm_transport.thermal_conductivity">
+<code class="sig-name descname">thermal_conductivity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.thermal_conductivity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the ion thermal conductivity coefficient using eq. 82 from [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>K</strong> – Ion thermal conductivity coefficients for system parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float or array_like</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The structure in which K is returned is in the form of a 3D array (1D if single value inputs).
+The first axis corresponds to density, the second is temperature, and the third is atomic number.</p>
+</div>
+<p class="rubric">Example</p>
+<p>Single value input:
+Am = 1.9944235e-23 # g
+rho = 1 # g/cc
+T = 0.5 # eV
+Z = 6</p>
+<p>K[0] returns the ion thermal conductivity coefficient for T = 0.5 eV, rho = 1 g/cc, and Z = 6.</p>
+<p>Range of inputs:
+Am = np.array([1.6735575e-24, 1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # g
+rho = np.array([1, 10, 100]) # g/cc
+T = np.array([0.1, 1, 10, 100]) # eV
+Z = np.array([1, 6, 13, 23])</p>
+<p>K[0,1,3] returns the ion thermal conductivity coefficient corresponding to the zeroth (python indexing)
+mass density in your input array (in this 1 g/cc), the first temperature of your
+T array (T = 1 eV), and the third entry in your Z array (Z = 23 for vanadium).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.sm_transport.viscocity">
+<code class="sig-name descname">viscocity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.viscocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the viscocity coefficient using eq. 75 from [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>eta</strong> – Viscocity coefficients for system parameters.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>float or array_like</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The structure in which eta is returned is in the form of a 3D array (1D if single value inputs).
+The first axis corresponds to density, the second is temperature, and the third is atomic number.</p>
+</div>
+<p class="rubric">Example</p>
+<p>Single value input:
+Am = 1.9944235e-23 # g
+rho = 1 # g/cc
+T = 0.5 # eV
+Z = 6</p>
+<p>Range of inputs:
+Am = np.array([1.6735575e-24, 1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # g
+rho = np.array([1, 10, 100]) # g/cc
+T = np.array([0.1, 1, 10, 100]) # eV
+Z = np.array([1, 6, 13, 23])</p>
+<p>eta[0,1,3] returns the viscocity coefficient corresponding to the zeroth (python indexing)
+mass density in your input array (in this case 6.9e-23), the first temperature of your
+T array (1 eV), and the third entry in your Z array (Z = 23 for vanadium).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="sm_transport" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Lucas J. Stanek, Liam G. Stanton, Michael S. Murillo
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #18453b;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #535054;
+    }
+    .wy-menu-vertical p.caption {
+	  color: #fff;
+	}
+	.wy-menu-vertical a {
+	  color: #eee;
+	}
+	.wy-menu-vertical a:hover {
+    background-color: #18453b;
+  }
+/*  .wy-nav-content {
+    max-width: 900px !important;
+  }*/
+}
+  </style>
+
+
+</body>
+</html>
