@@ -1,5 +1,5 @@
-sm_transport
-============
+plasma_properties
+=================
 
 .. toctree::
    :maxdepth: 4
