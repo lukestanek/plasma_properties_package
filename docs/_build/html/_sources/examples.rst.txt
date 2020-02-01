@@ -4,9 +4,9 @@
 Examples
 ========
 
-Stanton and Murillo Transport Class
------------------------------------
-The Stanton and Murillo transport class (:python:`sm_transport()`) class allows users to compute single 
+The Transport Module
+--------------------
+Currently, the `plasma_properties` package allows users to compute single 
 a transport coefficient or across a range of elements, mass densities, and temperatures using the 
 `Stanton and Murillo model <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203>`_. 
 Refer to *Fig 1.* for the structure of the output in the multi-element/mass-density/temperature case.
@@ -17,7 +17,7 @@ To compute a single transport coefficient do the following:
 
 .. code-block:: python
 
-   import plasma_properties as pprops
+   from plasma_properties import transport
 
    Am = 1.9944235e-23 # Atomic mass of element [g]
    rho_i = 1 # Mass density [g/cc]
@@ -25,7 +25,7 @@ To compute a single transport coefficient do the following:
    Z = 6 # Atomic number
 
    # Instantiate the Stanton-Murillo transport class
-   sm = pprops.sm_transport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
    
    # Compute transport coefficients
    D = sm.self_diffusion()
@@ -49,7 +49,7 @@ Below is example input for this case:
 
 .. code-block:: python
 
-   import plasma_properties as pprops
+   from plasma_properties import transport
 
    Am = np.array([1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # Atomic masses for each element [g]
    rho_i = np.array([1,10,100]) # Mass densities [g/cc]
@@ -57,7 +57,7 @@ Below is example input for this case:
    Z = np.array([6, 13, 23]) # Atomic number for each element
 
    # Instantiate the Stanton-Murillo transport class
-   sm = sm_transport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
 
    # Compute transport 
    D = sm.self_diffusion()
@@ -136,7 +136,7 @@ Example: Viscosity versus Density
 
 .. code-block:: python
 
-   import plasma_properties as pprops
+   from plasma_properties import transport
    import matplotlib.pyplot as plt
 
    Am = np.array([1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # atomic masses for each element [g]
@@ -145,7 +145,7 @@ Example: Viscosity versus Density
    Z = np.array([6, 13, 23]) # atomic number for each element
 
    # Instantiate the stanton-murillo transport class
-   sm = pprops.sm_transport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
 
    # Compute viscocity
    eta = sm.viscocity()
@@ -171,3 +171,13 @@ Example: Viscosity versus Density
  :width: 400
  :align: center
  :alt: viscosity coefficient as a function of density
+
+
+The Zbar Module
+---------------
+Coming soon! This will contain information on how to use the Zbar module which will hopefully include
+
+* Thomas-Fermi Zbar
+* Saha Zbar
+* Multispecies Thomas Fermi Zbar
+* Hydrogenic Saha Zbar

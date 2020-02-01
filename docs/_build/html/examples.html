@@ -85,7 +85,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#stanton-and-murillo-transport-class">Stanton and Murillo Transport Class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-transport-module">The Transport Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#computing-a-single-transport-coefficient">Computing a Single Transport Coefficient</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#computing-multiple-transport-coefficients">Computing Multiple Transport Coefficients</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#example-viscosity-versus-density">Example: Viscosity versus Density</a></li>
@@ -93,6 +93,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#the-zbar-module">The Zbar Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">plasma_properties</a></li>
@@ -162,16 +163,16 @@
             
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="stanton-and-murillo-transport-class">
-<h2>Stanton and Murillo Transport Class<a class="headerlink" href="#stanton-and-murillo-transport-class" title="Permalink to this headline">¶</a></h2>
-<p>The Stanton and Murillo transport class (<code class="code python docutils literal notranslate"><span class="name"><span class="pre">sm_transport</span></span><span class="punctuation"><span class="pre">()</span></span></code>) class allows users to compute single
+<div class="section" id="the-transport-module">
+<h2>The Transport Module<a class="headerlink" href="#the-transport-module" title="Permalink to this headline">¶</a></h2>
+<p>Currently, the <cite>plasma_properties</cite> package allows users to compute single
 a transport coefficient or across a range of elements, mass densities, and temperatures using the
 <a class="reference external" href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203">Stanton and Murillo model</a>.
 Refer to <em>Fig 1.</em> for the structure of the output in the multi-element/mass-density/temperature case.</p>
 <div class="section" id="computing-a-single-transport-coefficient">
 <h3>Computing a Single Transport Coefficient<a class="headerlink" href="#computing-a-single-transport-coefficient" title="Permalink to this headline">¶</a></h3>
 <p>To compute a single transport coefficient do the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plasma_properties</span> <span class="k">as</span> <span class="nn">pprops</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">transport</span>
 
 <span class="n">Am</span> <span class="o">=</span> <span class="mf">1.9944235e-23</span> <span class="c1"># Atomic mass of element [g]</span>
 <span class="n">rho_i</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Mass density [g/cc]</span>
@@ -179,7 +180,7 @@ Refer to <em>Fig 1.</em> for the structure of the output in the multi-element/ma
 <span class="n">Z</span> <span class="o">=</span> <span class="mi">6</span> <span class="c1"># Atomic number</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">pprops</span><span class="o">.</span><span class="n">sm_transport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute transport coefficients</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
@@ -197,7 +198,7 @@ Refer to <em>Fig 1.</em> for the structure of the output in the multi-element/ma
 <p>Computing transport coefficients for a range of elements, mass densities, and temperatures follows
 the same syntax as the single transport case except the inputs are now <code class="code python docutils literal notranslate"><span class="name"><span class="pre">numpy</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">array</span></span><span class="punctuation"><span class="pre">()</span></span></code>.</p>
 <p>Below is example input for this case:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plasma_properties</span> <span class="k">as</span> <span class="nn">pprops</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">transport</span>
 
 <span class="n">Am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.9944235e-23</span><span class="p">,</span> <span class="mf">4.4803895e-23</span><span class="p">,</span> <span class="mf">8.4590343e-23</span><span class="p">])</span> <span class="c1"># Atomic masses for each element [g]</span>
 <span class="n">rho_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span> <span class="c1"># Mass densities [g/cc]</span>
@@ -205,7 +206,7 @@ the same syntax as the single transport case except the inputs are now <code cla
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># Atomic number for each element</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">sm_transport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute transport</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
@@ -273,7 +274,7 @@ Note that each 2-dimensional “slice” in the <em>Z</em> direction corresponds
 </div>
 <div class="section" id="example-viscosity-versus-density">
 <h4>Example: Viscosity versus Density<a class="headerlink" href="#example-viscosity-versus-density" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plasma_properties</span> <span class="k">as</span> <span class="nn">pprops</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">transport</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">Am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.9944235e-23</span><span class="p">,</span> <span class="mf">4.4803895e-23</span><span class="p">,</span> <span class="mf">8.4590343e-23</span><span class="p">])</span> <span class="c1"># atomic masses for each element [g]</span>
@@ -282,7 +283,7 @@ Note that each 2-dimensional “slice” in the <em>Z</em> direction corresponds
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># atomic number for each element</span>
 
 <span class="c1"># Instantiate the stanton-murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">pprops</span><span class="o">.</span><span class="n">sm_transport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute viscocity</span>
 <span class="n">eta</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">viscocity</span><span class="p">()</span>
@@ -310,6 +311,16 @@ Note that each 2-dimensional “slice” in the <em>Z</em> direction corresponds
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="the-zbar-module">
+<h2>The Zbar Module<a class="headerlink" href="#the-zbar-module" title="Permalink to this headline">¶</a></h2>
+<p>Coming soon! This will contain information on how to use the Zbar module which will hopefully include</p>
+<ul class="simple">
+<li><p>Thomas-Fermi Zbar</p></li>
+<li><p>Saha Zbar</p></li>
+<li><p>Multispecies Thomas Fermi Zbar</p></li>
+<li><p>Hydrogenic Saha Zbar</p></li>
+</ul>
 </div>
 </div>
 

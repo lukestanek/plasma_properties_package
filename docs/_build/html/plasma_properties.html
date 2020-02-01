@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plasma_properties module &mdash; Plasma Properties  documentation</title>
+  <title>plasma_properties package &mdash; Plasma Properties  documentation</title>
   
 
   
@@ -85,7 +85,13 @@
 <li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">plasma_properties</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">plasma_properties module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">plasma_properties package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties.transport">plasma_properties.transport module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties.zbar">plasma_properties.zbar module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties">Module contents</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -135,7 +141,7 @@
         
           <li><a href="modules.html">plasma_properties</a> &raquo;</li>
         
-      <li>plasma_properties module</li>
+      <li>plasma_properties package</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -154,72 +160,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-plasma_properties">
-<span id="plasma-properties-module"></span><h1>plasma_properties module<a class="headerlink" href="#module-plasma_properties" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="plasma-properties-package">
+<h1>plasma_properties package<a class="headerlink" href="#plasma-properties-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plasma_properties.transport">
+<span id="plasma-properties-transport-module"></span><h2>plasma_properties.transport module<a class="headerlink" href="#module-plasma_properties.transport" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="plasma_properties.multi_species_trans">
-<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.</code><code class="sig-name descname">multi_species_trans</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_densities</em>, <em class="sig-param">Ts</em>, <em class="sig-param">Zs</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="plasma_properties.multi_species_trans.Knm">
-<code class="sig-name descname">Knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans.Knm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>g</strong> (<em>float</em><em> or </em><em>array_like</em>) – Plasma parameter (eq. 54 from [1])</p></li>
-<li><p><strong>n</strong> (<em>int</em>) – Subscript for collision intergral Knm (eq. C22 from [1])</p></li>
-<li><p><strong>m</strong> (<em>int</em>) – Subscript for collision integral Knm (eq. C22 from [1])</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>Knm</strong> – Fit to collision integral (eqs. C22-C24 from [1])</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array_like</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="plasma_properties.multi_species_trans.TF_Zbar">
-<code class="sig-name descname">TF_Zbar</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans.TF_Zbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thomas Fermi Zbar model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Z</strong> (<em>int</em>) – Atomic number.</p></li>
-<li><p><strong>ni</strong> (<em>float</em>) – Number density in units particles per
-cubic centimeter [N/cc].</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>Finite Temperature Thomas Fermi Charge State using
-R.M. More, “Pressure Ionization, Resonances, and the
-Continuity of Bound and Free States”, Adv. in Atomic
-Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="plasma_properties.multi_species_trans.inter_diffusion">
-<code class="sig-name descname">inter_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.multi_species_trans.inter_diffusion" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="plasma_properties.sm_transport">
-<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.</code><code class="sig-name descname">sm_transport</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport">
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.transport.</code><code class="sig-name descname">SmTransport</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Generate the Stanton and Murillo transport coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Am</strong> (<em>float</em><em> or </em><em>arrary_like</em>) – Atomic mass of element (or isotope) in units of grams [g].</p></li>
+<li><p><strong>mass_density</strong> (<em>float</em><em> or </em><em>array_like</em>) – Range of mass densities in units of grams per
+cubic centimeter [g/cc].</p></li>
+<li><p><strong>T</strong> (<em>float</em><em> or </em><em>array_like</em>) – Temperature range in units of elevtron-volts [eV]</p></li>
+<li><p><strong>Z</strong> (<em>int</em><em> or </em><em>arrray_like</em>) – Atomic number for each element</p></li>
+<li><p><strong>units_out</strong> (<em>str</em>) – Unit system for resulting transport coefficient.
+Default: dimensionless “star” units.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">References</p>
 <p>Stanton, Liam G., and Michael S. Murillo.
 “Ionic transport in high-energy-density matter.”
 Physical Review E 93.4 (2016): 043203.</p>
 <dl class="method">
-<dt id="plasma_properties.sm_transport.Knm">
-<code class="sig-name descname">Knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.Knm" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport.knm">
+<code class="sig-name descname">knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.knm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -230,7 +202,7 @@ Physical Review E 93.4 (2016): 043203.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>Knm</strong> – Fit to collision integral (eqs. C22-C24 from [1])</p>
+<dd class="field-even"><p><strong>knm</strong> – Fit to collision integral (eqs. C22-C24 from [1])</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>array_like</p>
@@ -239,28 +211,8 @@ Physical Review E 93.4 (2016): 043203.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.sm_transport.TF_Zbar">
-<code class="sig-name descname">TF_Zbar</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.TF_Zbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thomas Fermi Zbar model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Z</strong> (<em>int</em>) – Atomic number.</p></li>
-<li><p><strong>ni</strong> (<em>float</em>) – Number density in units particles per
-cubic centimeter [N/cc].</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>Finite Temperature Thomas Fermi Charge State using
-R.M. More, “Pressure Ionization, Resonances, and the
-Continuity of Bound and Free States”, Adv. in Atomic
-Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="plasma_properties.sm_transport.plasma_params">
-<code class="sig-name descname">plasma_params</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em>, <em class="sig-param">mi</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.plasma_params" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport.plasma_params">
+<code class="sig-name descname">plasma_params</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em>, <em class="sig-param">mi</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.plasma_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -274,14 +226,14 @@ Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.sm_transport.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em>, <em class="sig-param">xaxis='temeprature'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.plot" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em>, <em class="sig-param">xaxis='temeprature'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Very rough preliminary plotting method…. in development.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.sm_transport.self_diffusion">
-<code class="sig-name descname">self_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.self_diffusion" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport.self_diffusion">
+<code class="sig-name descname">self_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.self_diffusion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the self-diffusion coefficient using eq. 56 from [1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -296,26 +248,31 @@ Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
 <p>The structure in which D is returned is in the form of a 3D array (1D if single value inputs).
 The first axis corresponds to density, the second is temperature, and the third is atomic number.</p>
 </div>
-<p class="rubric">Example</p>
-<p>Single value input:</p>
-<p>Am = 1.9944235e-23 # g</p>
-<p>rho = 1 # g/cc</p>
-<p>T = 0.5 # eV</p>
-<p>Z = 6</p>
-<p>D[0] returns the self-diffusion coefficient for T = 0.5 eV, rho = 1 g/cc, and Z = 6.</p>
-<p>Range of inputs:
-Am = np.array([1.6735575e-24, 1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # g
-rho = np.array([1, 10, 100]) # g/cc
-T = np.array([0.1, 1, 10, 100]) # eV
-Z = np.array([1, 6, 13, 23])</p>
-<p>D[0,1,3] returns the self-diffusion coefficient corresponding to the zeroth (python indexing)
-mass density in your input array (in this 1 g/cc), the first temperature of your
-T array (T = 1 eV), and the third entry in your Z array (Z = 23 for vanadium).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.sm_transport.thermal_conductivity">
-<code class="sig-name descname">thermal_conductivity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.thermal_conductivity" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport.tf_zbar">
+<code class="sig-name descname">tf_zbar</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.tf_zbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thomas Fermi Zbar model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Z</strong> (<em>int</em>) – Atomic number.</p></li>
+<li><p><strong>ni</strong> (<em>float</em>) – Number density in units particles per
+cubic centimeter [N/cc].</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Finite Temperature Thomas Fermi Charge State using
+R.M. More, “Pressure Ionization, Resonances, and the
+Continuity of Bound and Free States”, Adv. in Atomic
+Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="plasma_properties.transport.SmTransport.thermal_conductivity">
+<code class="sig-name descname">thermal_conductivity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.thermal_conductivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the ion thermal conductivity coefficient using eq. 82 from [1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -330,26 +287,11 @@ T array (T = 1 eV), and the third entry in your Z array (Z = 23 for vanadium).</
 <p>The structure in which K is returned is in the form of a 3D array (1D if single value inputs).
 The first axis corresponds to density, the second is temperature, and the third is atomic number.</p>
 </div>
-<p class="rubric">Example</p>
-<p>Single value input:
-Am = 1.9944235e-23 # g
-rho = 1 # g/cc
-T = 0.5 # eV
-Z = 6</p>
-<p>K[0] returns the ion thermal conductivity coefficient for T = 0.5 eV, rho = 1 g/cc, and Z = 6.</p>
-<p>Range of inputs:
-Am = np.array([1.6735575e-24, 1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # g
-rho = np.array([1, 10, 100]) # g/cc
-T = np.array([0.1, 1, 10, 100]) # eV
-Z = np.array([1, 6, 13, 23])</p>
-<p>K[0,1,3] returns the ion thermal conductivity coefficient corresponding to the zeroth (python indexing)
-mass density in your input array (in this 1 g/cc), the first temperature of your
-T array (T = 1 eV), and the third entry in your Z array (Z = 23 for vanadium).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.sm_transport.viscocity">
-<code class="sig-name descname">viscocity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.sm_transport.viscocity" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SmTransport.viscocity">
+<code class="sig-name descname">viscocity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.viscocity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the viscocity coefficient using eq. 75 from [1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -364,24 +306,17 @@ T array (T = 1 eV), and the third entry in your Z array (Z = 23 for vanadium).</
 <p>The structure in which eta is returned is in the form of a 3D array (1D if single value inputs).
 The first axis corresponds to density, the second is temperature, and the third is atomic number.</p>
 </div>
-<p class="rubric">Example</p>
-<p>Single value input:
-Am = 1.9944235e-23 # g
-rho = 1 # g/cc
-T = 0.5 # eV
-Z = 6</p>
-<p>Range of inputs:
-Am = np.array([1.6735575e-24, 1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # g
-rho = np.array([1, 10, 100]) # g/cc
-T = np.array([0.1, 1, 10, 100]) # eV
-Z = np.array([1, 6, 13, 23])</p>
-<p>eta[0,1,3] returns the viscocity coefficient corresponding to the zeroth (python indexing)
-mass density in your input array (in this case 6.9e-23), the first temperature of your
-T array (1 eV), and the third entry in your Z array (Z = 23 for vanadium).</p>
 </dd></dl>
 
 </dd></dl>
 
+</div>
+<div class="section" id="module-plasma_properties.zbar">
+<span id="plasma-properties-zbar-module"></span><h2>plasma_properties.zbar module<a class="headerlink" href="#module-plasma_properties.zbar" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-plasma_properties">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-plasma_properties" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 

@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="plasma_properties-lukestanek", # Replace with your own username
-    version="0.0.1",
+    name="plasma_properties_package", # Replace with your own username
+    version="0.0.2",
     author="Lucas J. Stanek",
     author_email="staneklu@msu.edu",
     description="Compute Plasma Properties",

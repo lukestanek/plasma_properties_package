@@ -10,18 +10,20 @@ in Python 3. Click `here <https://www.anaconda.com/distribution/>`_ to obtain th
 
 Access
 ------
-Currently you can gain access to the `plasma_properties` module by cloning the GitHub repository. 
+Currently you can gain access to the `plasma_properties` module by using pip or by cloning the GitHub repository. 
+
+To Install from pip (Recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Open a terminal and type the following command:
+
+.. code-block:: bash
+    
+    $ pip install plasma_properties
 
 To Download from GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~
+Open a terminal and type the following command:
+
 .. code-block:: bash
 
-  $ git clone git@github.com:lukestanek/plasma_properties.git
-
-pip
-~~~
-.. code-block:: bash
-
-  $ pip install sm_transport
-
-
+    $ git clone git@github.com:lukestanek/plasma_properties.git

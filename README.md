@@ -1,2 +1,2 @@
-# sm_transport
-Library for computing Stanton and Murillo plasma transport coefficients.
+# Plasma Properties
+Module for computing properties in plasmas such as transort phenomena, Zbar, etc.
