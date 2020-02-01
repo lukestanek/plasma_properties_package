@@ -1,6 +1,0 @@
-README.md
-setup.py
-plasma_properties_lukestanek.egg-info/PKG-INFO
-plasma_properties_lukestanek.egg-info/SOURCES.txt
-plasma_properties_lukestanek.egg-info/dependency_links.txt
-plasma_properties_lukestanek.egg-info/top_level.txt
