@@ -29,7 +29,7 @@ To compute a single transport coefficient do the following:
    
    # Compute transport coefficients
    D = sm.self_diffusion()
-   eta = sm.viscocity()
+   eta = sm.viscosity()
    K = sm.thermal_conductivity()
 
    print(D, eta, K)
@@ -61,7 +61,7 @@ Below is example input for this case:
 
    # Compute transport 
    D = sm.self_diffusion()
-   eta = sm.viscocity()
+   eta = sm.viscosity()
    K = sm.thermal_conductivity()
 
 The output of the above code will be a 3-dimensional :python:`numpy.ndarray()` where the axes have the following structure.
@@ -80,6 +80,62 @@ The output of the above code will be a 3-dimensional :python:`numpy.ndarray()` w
    :python:`print(D[1,2,0])` (marked in red in *Fig. 1*). 
 
 Below is some example code for plotting data in the multiple element/mass-density/temperature case:
+
+.. code-block:: python
+
+   from plasma_properties import transport
+
+   Am = np.array([1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # atomic masses for each element (C, Al, and V) [g]
+   rho_i = np.array([1, 10, 100]) # mass density range [g/cc]
+   T = np.arange(0.2, 200, 1) # temperature range [eV]
+   Z = np.array([6, 13, 23]) # atomic numbers of C, Al, and V
+
+   # Instantiate the Stanton-Murillo transport submodule
+   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
+
+   # Compute Thermal Conductivity
+   K = sm.thermal_conductivity()
+
+   # Plotting 
+   fig, ax = plt.subplots(1, 3, sharey=True, figsize=(24,6))
+
+   ax[0].loglog(T, K[0,:,0], linewidth=2)
+   ax[0].loglog(T, K[0,:,1], linewidth=2)
+   ax[0].loglog(T, K[0,:,2], linewidth=2)
+
+   ax[0].set_title('$\\rho_i = 1 \; g/cc$', fontsize=22)
+   ax[0].set_ylabel('Thermal Conductivity $[erg/(cm * s * K)]$', fontsize=18)
+   ax[0].set_xlabel('Temperature [eV]', fontsize=18)
+   ax[0].tick_params(axis="x", labelsize=18) 
+   ax[0].tick_params(axis="y", labelsize=18) 
+
+   ax[1].loglog(T, K[1,:,0], linewidth=2)
+   ax[1].loglog(T, K[1,:,1], linewidth=2)
+   ax[1].loglog(T, K[1,:,2], linewidth=2)
+
+   ax[1].set_title('$\\rho_i = 10 \; g/cc$', fontsize=22)
+   ax[1].set_xlabel('Temperature [eV]', fontsize=18)
+   ax[1].tick_params(axis="x", labelsize=18) 
+   ax[1].tick_params(axis="y", labelsize=18) 
+
+   ax[2].loglog(T, K[2,:,0], linewidth=2, label = 'Carbon')
+   ax[2].loglog(T, K[2,:,1], linewidth=2, label = 'Aluminum')
+   ax[2].loglog(T, K[2,:,2], linewidth=2, label = 'Vanadium')
+
+   ax[2].set_title('$\\rho_i = 100  \; g/cc$', fontsize=22)
+   ax[2].set_xlabel('Temperature [eV]', fontsize=18)
+   ax[2].tick_params(axis="x", labelsize=18) 
+   ax[2].tick_params(axis="y", labelsize=18) 
+
+   plt.legend(fontsize=20)
+   plt.savefig('mass_density_compare.png', bbox_inches = 'tight', dpi=300)
+   plt.show()
+
+.. figure:: _images/mass_density_compare.png
+ :width: 2000
+ :align: center
+ :alt: Thermal conductivity for different mass densities and elements.
+
 
 .. code-block:: python
    
@@ -122,13 +178,13 @@ Below is some example code for plotting data in the multiple element/mass-densit
    ax[2].tick_params(axis="x", labelsize=18) 
    ax[2].tick_params(axis="y", labelsize=18) 
 
-   plt.show()
    plt.savefig('transport_compare.png', dpi=300, bbox_inches='tight')
+   plt.show()
 
 .. figure:: _images/transport_compare.png
  :width: 850
  :align: center
- :alt: Self-diffusion, viscosity, and thermal conductivity plots
+ :alt: Self-diffusion, viscosity, and thermal conductivity plots.
 
 
 Example: Viscosity versus Density
@@ -140,15 +196,15 @@ Example: Viscosity versus Density
    import matplotlib.pyplot as plt
 
    Am = np.array([1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # atomic masses for each element [g]
-   rho_i = np.arange(0.1, 10, 0.01) # mass density [g/cc]
-   T = 0.2 # temeprature [eV]
+   rho_i = np.arange(0.1, 10, 0.01) # mass densities [g/cc]
+   T = 0.2 # temperature [eV]
    Z = np.array([6, 13, 23]) # atomic number for each element
 
-   # Instantiate the stanton-murillo transport class
+   # Instantiate the Stanton-Murillo transport submodule
    sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
 
-   # Compute viscocity
-   eta = sm.viscocity()
+   # Compute viscosity
+   eta = sm.viscosity()
 
    # Plotting
    plt.figure(figsize=(10,8))
@@ -164,20 +220,115 @@ Example: Viscosity versus Density
    plt.yticks([7e-4, 1e-3, 2e-3])
    plt.tick_params(axis="x", labelsize=16) 
    plt.tick_params(axis="y", labelsize=16)
-   plt.show()
+
    plt.savefig('viscosity.png', dpi=300, bbox_inches='tight')
+   plt.show()
 
 .. figure:: _images/viscosity.png
  :width: 400
  :align: center
- :alt: viscosity coefficient as a function of density
+ :alt: viscosity coefficient as a function of density.
+
+
+Coming Soon!
+~~~~~~~~~~~~
+   * Inter-diffusion
+   * Electrical Conductivity
 
 
 The Zbar Module
 ---------------
-Coming soon! This will contain information on how to use the Zbar module which will hopefully include
+The current module for computing the mean ionization state (:math:`\langle Z \rangle` or *Zbar*) is the Thomas-Fermi model (TF_Zbar). The returned data structure 
+is the same structure as *Fig. 1*. Some example code and plots can be found below.
 
-* Thomas-Fermi Zbar
-* Saha Zbar
-* Multispecies Thomas Fermi Zbar
-* Hydrogenic Saha Zbar
+TF_Zbar for Single Element versus Temperature
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from plasma_properties import zbar
+   import matplotlib.pyplot as plt
+
+   # Initialize parameters for our system
+   Am = np.array([1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # Atomic masses for each element [g]
+   rho_i = np.array([1,10,100]) # Mass densities [g/cc]
+   T = np.arange(1e-2, 1e5, 0.1) # Temperature range [eV]
+   Z = np.array([6, 13, 23]) # Atomic number for each element
+
+   # Create a mean ionization object
+   mi = zbar.MeanIonization(Am, rho_i, T, Z)
+
+   # Compute Thomas-Fermi zbar
+   Zbar = mi.tf_zbar()
+
+   # Plotting
+   plt.figure(figsize=(10,8))
+
+   # Plot each mass density for all temperatures for only the first element
+   plt.semilogx(T, Zbar[0,:,0], linewidth=2, label='$\\rho_i = 1 \; g/cc$')
+   plt.semilogx(T, Zbar[1,:,0], linewidth=2, label='$\\rho_i = 10 \; g/cc$')
+   plt.semilogx(T, Zbar[2,:,0], linewidth=2, label='$\\rho_i = 100 \; g/cc$')
+
+   plt.xticks(fontsize=16)
+   plt.yticks(fontsize=16)
+   plt.xlabel('Temperature [eV]', fontsize=18)
+   plt.ylabel('Mean Ionization', fontsize=18)
+   plt.title('Carbon Mean Ionization using Thomas-Fermi', fontsize=18)
+   plt.legend(fontsize=16)
+   plt.savefig('TF_zbar.png', bbox_inches='tight', dpi=300)
+   plt.show()
+
+.. figure:: _images/TF_zbar.png
+ :width: 400
+ :align: center
+ :alt: Zbar as a function of temperature for different mass densities.
+
+
+TF_Zbar for Multiple Elements versus Temperature
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+   from plasma_properties import zbar
+   import matplotlib.pyplot as plt
+
+   # Initalize parameters for our system
+   Am = np.array([1.6735575e-24, 1.9944235e-23, 9.2732796e-23]) # Atomic masses for each element [g]
+   rho_i = 1 # Mass densitiy for all elements [g/cc]
+   T = np.arange(1e-2, 1e5, 0.1) # Temperature range [eV]
+   Z = np.array([1, 6, 26]) # Atomic number for each element
+
+   # Create a mean ionization object
+   mi = zbar.MeanIonization(Am, rho_i, T, Z)
+
+   # Compute Thomas-Fermi Zbar
+   Zbar = mi.tf_zbar()
+
+   # Plotting
+   plt.figure(figsize=(10,8))
+
+   plt.semilogx(T, Zbar[0,:,0], linewidth=2, label='H')
+   plt.semilogx(T, Zbar[0,:,1], linewidth=2, label='C')
+   plt.semilogx(T, Zbar[0,:,2], linewidth=2, label='Fe')
+
+   plt.xticks(fontsize=16)
+   plt.yticks(fontsize=16)
+
+   plt.xlabel('Temperature [eV]', fontsize=18)
+   plt.ylabel('Mean Ionization', fontsize=18)
+   plt.title('Mean Ionization for Various Elements using Thomas-Fermi', fontsize=18)
+   plt.legend(fontsize=16)
+   plt.savefig('TF_zbar_element_compare.png', bbox_inches='tight', dpi=300)
+   plt.show()
+
+.. figure:: _images/TF_zbar_element_compare.png
+ :width: 400
+ :align: center
+ :alt: Zbar as a function of temperature for different elements.
+
+
+Coming Soon!
+~~~~~~~~~~~~
+   * Saha Zbar
+   * Multispecies Thomas Fermi Zbar
+   * Hydrogenic Saha Zbar

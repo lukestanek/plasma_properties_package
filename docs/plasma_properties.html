@@ -171,7 +171,7 @@
 <dt id="plasma_properties.transport.SmTransport">
 <em class="property">class </em><code class="sig-prename descclassname">plasma_properties.transport.</code><code class="sig-name descname">SmTransport</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Generate the Stanton and Murillo transport coefficients.</p>
+<p>Generate the Stanton and Murillo transport coefficients. This is a second test. please work.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -313,6 +313,35 @@ The first axis corresponds to density, the second is temperature, and the third 
 </div>
 <div class="section" id="module-plasma_properties.zbar">
 <span id="plasma-properties-zbar-module"></span><h2>plasma_properties.zbar module<a class="headerlink" href="#module-plasma_properties.zbar" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plasma_properties.zbar.MeanIonization">
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.zbar.</code><code class="sig-name descname">MeanIonization</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.MeanIonization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Compute the mean ionization state (&lt;Z&gt; or Zbar) for a given system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Am</strong> (<em>float</em><em> or </em><em>arrary_like</em>) – Atomic mass of element (or isotope) in units of grams [g].</p></li>
+<li><p><strong>mass_density</strong> (<em>float</em><em> or </em><em>array_like</em>) – Range of mass densities in units of grams per
+cubic centimeter [g/cc].</p></li>
+<li><p><strong>T</strong> (<em>float</em><em> or </em><em>array_like</em>) – Temperature range in units of elevtron-volts [eV]</p></li>
+<li><p><strong>Z</strong> (<em>int</em><em> or </em><em>arrray_like</em>) – Atomic number for each element</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="plasma_properties.zbar.MeanIonization.tf_zbar">
+<code class="sig-name descname">tf_zbar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.MeanIonization.tf_zbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thomas Fermi Zbar model.</p>
+<p class="rubric">References</p>
+<p>Finite Temperature Thomas Fermi Charge State using
+R.M. More, “Pressure Ionization, Resonances, and the
+Continuity of Bound and Free States”, Adv. in Atomic
+Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-plasma_properties">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-plasma_properties" title="Permalink to this headline">¶</a></h2>
