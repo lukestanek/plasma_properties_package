@@ -87,6 +87,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">plasma_properties</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">plasma_properties package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties.parameters">plasma_properties.parameters module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties.transport">plasma_properties.transport module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties.zbar">plasma_properties.zbar module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-plasma_properties">Module contents</a></li>
@@ -165,13 +166,27 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-plasma_properties.parameters">
+<span id="plasma-properties-parameters-module"></span><h2>plasma_properties.parameters module<a class="headerlink" href="#module-plasma_properties.parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="plasma_properties.parameters.Params">
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.parameters.</code><code class="sig-name descname">Params</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.parameters.Params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="plasma_properties.parameters.Params.gamma">
+<code class="sig-name descname">gamma</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.parameters.Params.gamma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-plasma_properties.transport">
 <span id="plasma-properties-transport-module"></span><h2>plasma_properties.transport module<a class="headerlink" href="#module-plasma_properties.transport" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="plasma_properties.transport.SmTransport">
-<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.transport.</code><code class="sig-name descname">SmTransport</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM">
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.transport.</code><code class="sig-name descname">SM</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">units_out='star'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Generate the Stanton and Murillo transport coefficients. This is a second test. please work.</p>
+<p>Generate the Stanton and Murillo transport coefficients. test</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -186,12 +201,14 @@ Default: dimensionless “star” units.</p></li>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Stanton, Liam G., and Michael S. Murillo.
-“Ionic transport in high-energy-density matter.”
-Physical Review E 93.4 (2016): 043203.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id1"><span class="brackets">1</span></dt>
+<dd><p><a class="reference external" href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203">Stanton, Liam G., and Michael S. Murillo. “Ionic transport in high-energy-density matter.” Physical Review E 93.4 (2016): 043203.</a></p>
+</dd>
+</dl>
 <dl class="method">
-<dt id="plasma_properties.transport.SmTransport.knm">
-<code class="sig-name descname">knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.knm" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM.knm">
+<code class="sig-name descname">knm</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">n</em>, <em class="sig-param">m</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM.knm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -211,8 +228,8 @@ Physical Review E 93.4 (2016): 043203.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.transport.SmTransport.plasma_params">
-<code class="sig-name descname">plasma_params</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em>, <em class="sig-param">mi</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.plasma_params" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM.plasma_params">
+<code class="sig-name descname">plasma_params</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em>, <em class="sig-param">mi</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM.plasma_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -226,14 +243,14 @@ Physical Review E 93.4 (2016): 043203.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.transport.SmTransport.plot">
-<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em>, <em class="sig-param">xaxis='temeprature'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.plot" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em>, <em class="sig-param">xaxis='temeprature'</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Very rough preliminary plotting method…. in development.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.transport.SmTransport.self_diffusion">
-<code class="sig-name descname">self_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.self_diffusion" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM.self_diffusion">
+<code class="sig-name descname">self_diffusion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM.self_diffusion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the self-diffusion coefficient using eq. 56 from [1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -251,28 +268,8 @@ The first axis corresponds to density, the second is temperature, and the third 
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.transport.SmTransport.tf_zbar">
-<code class="sig-name descname">tf_zbar</code><span class="sig-paren">(</span><em class="sig-param">Z</em>, <em class="sig-param">ni</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.tf_zbar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Thomas Fermi Zbar model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Z</strong> (<em>int</em>) – Atomic number.</p></li>
-<li><p><strong>ni</strong> (<em>float</em>) – Number density in units particles per
-cubic centimeter [N/cc].</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>Finite Temperature Thomas Fermi Charge State using
-R.M. More, “Pressure Ionization, Resonances, and the
-Continuity of Bound and Free States”, Adv. in Atomic
-Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="plasma_properties.transport.SmTransport.thermal_conductivity">
-<code class="sig-name descname">thermal_conductivity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.thermal_conductivity" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM.thermal_conductivity">
+<code class="sig-name descname">thermal_conductivity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM.thermal_conductivity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the ion thermal conductivity coefficient using eq. 82 from [1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -290,8 +287,8 @@ The first axis corresponds to density, the second is temperature, and the third 
 </dd></dl>
 
 <dl class="method">
-<dt id="plasma_properties.transport.SmTransport.viscosity">
-<code class="sig-name descname">viscosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SmTransport.viscosity" title="Permalink to this definition">¶</a></dt>
+<dt id="plasma_properties.transport.SM.viscosity">
+<code class="sig-name descname">viscosity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.transport.SM.viscosity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the viscosity coefficient using eq. 75 from [1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -315,7 +312,7 @@ The first axis corresponds to density, the second is temperature, and the third 
 <span id="plasma-properties-zbar-module"></span><h2>plasma_properties.zbar module<a class="headerlink" href="#module-plasma_properties.zbar" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="plasma_properties.zbar.MeanIonization">
-<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.zbar.</code><code class="sig-name descname">MeanIonization</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.MeanIonization" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">plasma_properties.zbar.</code><code class="sig-name descname">MeanIonization</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.MeanIonization" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Compute the mean ionization state (&lt;Z&gt; or Zbar) for a given system.</p>
 <dl class="field-list simple">
@@ -330,6 +327,11 @@ cubic centimeter [g/cc].</p></li>
 </dd>
 </dl>
 <dl class="method">
+<dt id="plasma_properties.zbar.MeanIonization.get_zbar">
+<code class="sig-name descname">get_zbar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.MeanIonization.get_zbar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="plasma_properties.zbar.MeanIonization.tf_zbar">
 <code class="sig-name descname">tf_zbar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.MeanIonization.tf_zbar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Thomas Fermi Zbar model.</p>
@@ -340,6 +342,23 @@ Continuity of Bound and Free States”, Adv. in Atomic
 Mol. Phys., Vol. 21, p. 332 (Table IV).</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="plasma_properties.zbar.ZBAR">
+<code class="sig-prename descclassname">plasma_properties.zbar.</code><code class="sig-name descname">ZBAR</code><span class="sig-paren">(</span><em class="sig-param">Am</em>, <em class="sig-param">mass_density</em>, <em class="sig-param">T</em>, <em class="sig-param">Z</em>, <em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#plasma_properties.zbar.ZBAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the mean ionization state (&lt;Z&gt; or Zbar) for a given system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Am</strong> (<em>float</em><em> or </em><em>arrary_like</em>) – Atomic mass of element (or isotope) in units of grams [g].</p></li>
+<li><p><strong>mass_density</strong> (<em>float</em><em> or </em><em>array_like</em>) – Range of mass densities in units of grams per
+cubic centimeter [g/cc].</p></li>
+<li><p><strong>T</strong> (<em>float</em><em> or </em><em>array_like</em>) – Temperature range in units of elevtron-volts [eV]</p></li>
+<li><p><strong>Z</strong> (<em>int</em><em> or </em><em>arrray_like</em>) – Atomic number for each element</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

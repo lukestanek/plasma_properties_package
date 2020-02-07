@@ -4,6 +4,14 @@ plasma\_properties package
 Submodules
 ----------
 
+plasma\_properties.parameters module
+------------------------------------
+
+.. automodule:: plasma_properties.parameters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 plasma\_properties.transport module
 -----------------------------------
 

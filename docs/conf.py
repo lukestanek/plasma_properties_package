@@ -29,7 +29,7 @@ author = 'Lucas J. Stanek, Liam G. Stanton, Michael S. Murillo'
 # ones.
 extensions = ['sphinx_rtd_theme', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 
-autodoc_mock_imports = ['numpy', 'matplotlib']
+autodoc_mock_imports = ['numpy', 'matplotlib', 'zbar']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
