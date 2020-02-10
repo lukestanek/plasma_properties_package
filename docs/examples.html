@@ -90,6 +90,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#computing-multiple-transport-coefficients">Computing Multiple Transport Coefficients</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#example-thermal-conductivity-versus-temperature">Example: Thermal Conductivity versus Temperature</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#example-viscosity-versus-density">Example: Viscosity versus Density</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#example-transport-for-different-isotopes-and-elements">Example: Transport for Different Isotopes and Elements</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#coming-soon">Coming Soon!</a></li>
@@ -176,6 +177,19 @@
 a transport coefficient or across a range of elements, mass densities, and temperatures using the
 <a class="reference external" href="https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203">Stanton and Murillo model</a>.
 Refer to <em>Fig 1.</em> for the structure of the output in the multi-element/mass-density/temperature case.</p>
+<p>The current capabilities include computing a single transport coefficient for a given atomic mass [g], nuclear charge (atomic number), temperature [eV], and mass density [g/cc].</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>The atomic mass and atomic number are coupled.</strong> When computing transport for a range of elements and isotopes, the entry in each array must correspond.</p>
+<p>For example, if you wanted to compute transport coefficients for three isotopes of hydrogen and one isotope of helium, the input arrays would be structured as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Atomic mass for each isotope [1H, 2H, 3H, 1He] in grams</span>
+<span class="n">Am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.6735e-24</span><span class="p">,</span> <span class="mf">3.3445e-24</span><span class="p">,</span> <span class="mf">5.0083e-24</span><span class="p">,</span> <span class="mf">6.6464e-24</span><span class="p">])</span>
+
+<span class="c1"># Nuclear charge for hydrogen and each of its isotopes and helium [1H, 2H, 3H, 1He]</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="computing-a-single-transport-coefficient">
 <h3>Computing a Single Transport Coefficient<a class="headerlink" href="#computing-a-single-transport-coefficient" title="Permalink to this headline">¶</a></h3>
 <p>To compute a single transport coefficient do the following:</p>
@@ -224,7 +238,7 @@ the same syntax as the single transport case except the inputs are now <code cla
 </div>
 <p>The output of the above code will be a 3-dimensional <code class="code python docutils literal notranslate"><span class="name"><span class="pre">numpy</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">ndarray</span></span><span class="punctuation"><span class="pre">()</span></span></code> where the axes have the following structure.</p>
 <div class="figure align-center" id="id2">
-<a class="reference internal image-reference" href="_images/transport_data_structure_grid2.png"><img alt="Transport Coefficient Data Structure" src="_images/transport_data_structure_grid2.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="_images/transport_data_structure_grid2.png"><img alt="Transport Coefficient Data Structure" src="_images/transport_data_structure_grid2.png" style="width: 450px;" /></a>
 <p class="caption"><span class="caption-text">Fig 1. The shape of the data structure that is output for the case of multi-element/temperature/density transport coefficients.
 Note that each 2-dimensional “slice” in the <em>Z</em> direction corresponds to a different element, and moving along the positive <span class="math notranslate nohighlight">\(\rho\)</span>/T direction corresponds to an increase in the mass-density/temperature for a fixed element.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
@@ -375,6 +389,60 @@ the code block above:</p>
 <a class="reference internal image-reference" href="_images/viscosity.png"><img alt="viscosity coefficient as a function of density." src="_images/viscosity.png" style="width: 400px;" /></a>
 </div>
 </div>
+<div class="section" id="example-transport-for-different-isotopes-and-elements">
+<h4>Example: Transport for Different Isotopes and Elements<a class="headerlink" href="#example-transport-for-different-isotopes-and-elements" title="Permalink to this headline">¶</a></h4>
+<p>As mentioned in the <em>note</em> in section <a class="reference internal" href="#the-transport-module">The Transport Module</a>, the atomic mass and nuclear charge are coupled. To compute transport for different isotopes of the same element with additional elements, you will need to repeat the nuclear charge in the <em>Z</em> array but chance the atomic mass for each isotope. Fig. 2 shows a fiagram of the data strcuture returned for the case of multiple isotopes and elements.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="_images/isotope_ex.png"><img alt="Diagram of the data structure returned for the case of multiple isotopes and elements." src="_images/isotope_ex.png" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text">Fig 2. The shape of the data structure that is output for the case of multiple isotopes (each layer of green), and different elements (green, blue, purple, and orange layers).</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">transport</span>
+
+<span class="c1"># Atomic mass [g] for each isotope/element - entries correspond to Z array</span>
+<span class="n">Am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.6735575e-24</span><span class="p">,</span> <span class="mf">3.344325e-24</span><span class="p">,</span> <span class="mf">5.0082670843e-24</span><span class="p">,</span> <span class="mf">1.1525801e-23</span><span class="p">,</span> <span class="mf">1.9944235e-23</span><span class="p">,</span> <span class="mf">4.4803895e-23</span><span class="p">])</span>
+
+<span class="c1"># Mass density [g/cc]</span>
+<span class="n">rho_i</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Temperature range [eV]</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Nuclear charge for each element - entries correspond to Am array</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">])</span>
+
+<span class="c1"># Create the stanton-murillo transport object</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+
+<span class="c1"># Compute self-diffusion</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
+
+<span class="c1"># Plotting</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;b-d&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Hydrogen&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b-x&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Deuterium&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;b-v&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Tritium&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">3</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lithium&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">4</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Carbon&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">5</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Aluminum&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature [eV]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Self-Diffusion $[cm^2/s]$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Self-Diffusion for Various Isotopes and Elements&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/isotope_compare.png"><img alt="Self diffusion for three hydrogen isotopes, lithium, carbon, and aluminum." src="_images/isotope_compare.png" style="width: 450px;" /></a>
+</div>
+</div>
 </div>
 <div class="section" id="coming-soon">
 <h3>Coming Soon!<a class="headerlink" href="#coming-soon" title="Permalink to this headline">¶</a></h3>
@@ -399,8 +467,8 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
 
 <span class="c1"># Initialize parameters for our system</span>
 <span class="n">Am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.9944235e-23</span><span class="p">,</span> <span class="mf">4.4803895e-23</span><span class="p">,</span> <span class="mf">8.4590343e-23</span><span class="p">])</span> <span class="c1"># Atomic masses for each element [g]</span>
-<span class="n">rho_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span> <span class="c1"># Mass densities [g/cc]</span>
-<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="c1"># Temperature range [eV]</span>
+<span class="n">rho_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span> <span class="c1"># Mass densities [g/cc]</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># Temperature range [eV]</span>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># Atomic number for each element</span>
 
 <span class="c1"># Create a mean ionization object</span>
@@ -422,7 +490,7 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature [eV]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Mean Ionization&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Carbon Mean Ionization using Thomas-Fermi&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -441,7 +509,7 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
 <span class="c1"># Initalize parameters for our system</span>
 <span class="n">Am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.6735575e-24</span><span class="p">,</span> <span class="mf">1.9944235e-23</span><span class="p">,</span> <span class="mf">9.2732796e-23</span><span class="p">])</span> <span class="c1"># Atomic masses for each element [g]</span>
 <span class="n">rho_i</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Mass densitiy for all elements [g/cc]</span>
-<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="c1"># Temperature range [eV]</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># Temperature range [eV]</span>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">26</span><span class="p">])</span> <span class="c1"># Atomic number for each element</span>
 
 <span class="c1"># Create a mean ionization object</span>
@@ -453,9 +521,9 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
 <span class="c1"># Plotting</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Zbar</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Zbar</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Zbar</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fe&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Zbar</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Hydrogen&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Zbar</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Carbon&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Zbar</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">2</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Iron&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
@@ -463,7 +531,7 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature [eV]&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Mean Ionization&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Mean Ionization for Various Elements using Thomas-Fermi&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>

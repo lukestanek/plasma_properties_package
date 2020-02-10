@@ -11,6 +11,21 @@ a transport coefficient or across a range of elements, mass densities, and tempe
 `Stanton and Murillo model <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203>`_. 
 Refer to *Fig 1.* for the structure of the output in the multi-element/mass-density/temperature case.
 
+The current capabilities include computing a single transport coefficient for a given atomic mass [g], nuclear charge (atomic number), temperature [eV], and mass density [g/cc]. 
+
+.. note::
+   **The atomic mass and atomic number are coupled.** When computing transport for a range of elements and isotopes, the entry in each array must correspond.
+
+   For example, if you wanted to compute transport coefficients for three isotopes of hydrogen and one isotope of helium, the input arrays would be structured as follows:
+
+   .. code:: python
+
+      # Atomic mass for each isotope [1H, 2H, 3H, 1He] in grams
+      Am = np.array([1.6735e-24, 3.3445e-24, 5.0083e-24, 6.6464e-24])
+
+      # Nuclear charge for hydrogen and each of its isotopes and helium [1H, 2H, 3H, 1He]
+      Z = np.array([1, 1, 1, 2])
+
 Computing a Single Transport Coefficient
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 To compute a single transport coefficient do the following:
@@ -68,7 +83,7 @@ Below is example input for this case:
 The output of the above code will be a 3-dimensional :python:`numpy.ndarray()` where the axes have the following structure.
 
 .. figure:: _images/transport_data_structure_grid2.png
- :width: 400
+ :width: 450
  :align: center
  :alt: Transport Coefficient Data Structure
 
@@ -128,6 +143,7 @@ the code block above:
  :width: 850
  :align: center
  :alt: Self-diffusion, viscosity, and thermal conductivity plots.
+
 
 
 Example: Thermal Conductivity versus Temperature
@@ -234,6 +250,66 @@ Example: Viscosity versus Density
  :align: center
  :alt: viscosity coefficient as a function of density.
 
+Example: Transport for Different Isotopes and Elements
+******************************************************
+
+As mentioned in the *note* in section `The Transport Module`_, the atomic mass and nuclear charge are coupled. To compute transport for different isotopes of the same element with additional elements, you will need to repeat the nuclear charge in the *Z* array but chance the atomic mass for each isotope. Fig. 2 shows a fiagram of the data strcuture returned for the case of multiple isotopes and elements. 
+
+.. figure:: _images/isotope_ex.png
+ :width: 450
+ :align: center
+ :alt: Diagram of the data structure returned for the case of multiple isotopes and elements. 
+
+ Fig 2. The shape of the data structure that is output for the case of multiple isotopes (each layer of green), and different elements (green, blue, purple, and orange layers).
+
+.. code:: python
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   from plasma_properties import transport
+
+   # Atomic mass [g] for each isotope/element - entries correspond to Z array
+   Am = np.array([1.6735575e-24, 3.344325e-24, 5.0082670843e-24, 1.1525801e-23, 1.9944235e-23, 4.4803895e-23]) 
+
+   # Mass density [g/cc]
+   rho_i = 1
+
+   # Temperature range [eV]
+   T = np.linspace(0.1, 100, 100)
+
+   # Nuclear charge for each element - entries correspond to Am array
+   Z = np.array([1, 1, 1, 3, 6, 13])
+
+   # Create the stanton-murillo transport object
+   sm = transport.SM(Am, rho_i, T, Z, units_out='cgs')
+
+   # Compute self-diffusion
+   D = sm.self_diffusion()
+
+   # Plotting
+   plt.figure(figsize=(10,8))
+   plt.loglog(T, D[0,:,0], 'b-d', linewidth=3, label='Hydrogen')
+   plt.loglog(T, D[0,:,1], 'b-x', linewidth=3, label='Deuterium')
+   plt.loglog(T, D[0,:,2], 'b-v', linewidth=3, label='Tritium')
+   plt.loglog(T, D[0,:,3], linewidth=3, label='Lithium')
+   plt.loglog(T, D[0,:,4], linewidth=3, label='Carbon')
+   plt.loglog(T, D[0,:,5], linewidth=3, label='Aluminum')
+
+   plt.xticks(fontsize=16)
+   plt.yticks(fontsize=16)
+
+   plt.xlabel('Temperature [eV]', fontsize=18)
+   plt.ylabel('Self-Diffusion $[cm^2/s]$', fontsize=18)
+   plt.title('Self-Diffusion for Various Isotopes and Elements', fontsize=18)
+   plt.legend(fontsize=18)
+   
+   plt.show()
+
+.. figure:: _images/isotope_compare.png
+ :width: 450
+ :align: center
+ :alt: Self diffusion for three hydrogen isotopes, lithium, carbon, and aluminum.
 
 Coming Soon!
 ~~~~~~~~~~~~
@@ -258,8 +334,8 @@ TF_Zbar for Single Element versus Temperature
 
    # Initialize parameters for our system
    Am = np.array([1.9944235e-23, 4.4803895e-23, 8.4590343e-23]) # Atomic masses for each element [g]
-   rho_i = np.array([1,10,100]) # Mass densities [g/cc]
-   T = np.arange(1e-2, 1e5, 0.1) # Temperature range [eV]
+   rho_i = np.array([1, 10, 100]) # Mass densities [g/cc]
+   T = np.arange(1e-2, 1e5, 1) # Temperature range [eV]
    Z = np.array([6, 13, 23]) # Atomic number for each element
 
    # Create a mean ionization object
@@ -281,7 +357,7 @@ TF_Zbar for Single Element versus Temperature
    plt.xlabel('Temperature [eV]', fontsize=18)
    plt.ylabel('Mean Ionization', fontsize=18)
    plt.title('Carbon Mean Ionization using Thomas-Fermi', fontsize=18)
-   plt.legend(fontsize=16)
+   plt.legend(fontsize=16, loc='upper left')
 
    plt.show()
 
@@ -304,7 +380,7 @@ TF_Zbar for Multiple Elements versus Temperature
    # Initalize parameters for our system
    Am = np.array([1.6735575e-24, 1.9944235e-23, 9.2732796e-23]) # Atomic masses for each element [g]
    rho_i = 1 # Mass densitiy for all elements [g/cc]
-   T = np.arange(1e-2, 1e5, 0.1) # Temperature range [eV]
+   T = np.arange(1e-2, 1e5, 1) # Temperature range [eV]
    Z = np.array([1, 6, 26]) # Atomic number for each element
 
    # Create a mean ionization object
@@ -316,9 +392,9 @@ TF_Zbar for Multiple Elements versus Temperature
    # Plotting
    plt.figure(figsize=(10,8))
 
-   plt.semilogx(T, Zbar[0,:,0], linewidth=2, label='H')
-   plt.semilogx(T, Zbar[0,:,1], linewidth=2, label='C')
-   plt.semilogx(T, Zbar[0,:,2], linewidth=2, label='Fe')
+   plt.semilogx(T, Zbar[0,:,0], linewidth=2, label='Hydrogen')
+   plt.semilogx(T, Zbar[0,:,1], linewidth=2, label='Carbon')
+   plt.semilogx(T, Zbar[0,:,2], linewidth=2, label='Iron')
 
    plt.xticks(fontsize=16)
    plt.yticks(fontsize=16)
@@ -326,7 +402,7 @@ TF_Zbar for Multiple Elements versus Temperature
    plt.xlabel('Temperature [eV]', fontsize=18)
    plt.ylabel('Mean Ionization', fontsize=18)
    plt.title('Mean Ionization for Various Elements using Thomas-Fermi', fontsize=18)
-   plt.legend(fontsize=16)
+   plt.legend(fontsize=16, loc ='upper left')
 
    plt.show()
 

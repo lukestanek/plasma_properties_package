@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+import zbar
 # class MultiSpeciesTrans:
 
 #     def __init__(self, Am, mass_densities, Ts, Zs, units_out='star'):
@@ -186,52 +186,7 @@ class SmTransport:
         self.hbar = 6.5822958e-16 # reduced Planck's constant [eV*s]
         self.me = 9.1095e-28 # mass of electron [g]
         self.units_out = units_out
-        
-    def tf_zbar(self, Z, ni):
-
-        """ Thomas Fermi Zbar model.
-        
-        Parameters
-        ----------
-        Z : int
-            Atomic number.
             
-        ni : float
-            Number density in units particles per 
-            cubic centimeter [N/cc].
-      
-        References
-        ----------
-        Finite Temperature Thomas Fermi Charge State using 
-        R.M. More, "Pressure Ionization, Resonances, and the
-        Continuity of Bound and Free States", Adv. in Atomic 
-        Mol. Phys., Vol. 21, p. 332 (Table IV).
-        """
-        
-        alpha = 14.3139
-        beta = 0.6624
-        a1 = 0.003323
-        a2 = 0.9718
-        a3 = 9.26148e-5
-        a4 = 3.10165
-        b0 = -1.7630
-        b1 = 1.43175
-        b2 = 0.31546
-        c1 = -0.366667
-        c2 = 0.983333
-
-        convert = ni * 1.6726219e-24
-        R = convert/Z
-        T0 = self.T/Z**(4./3.)
-        Tf = T0/(1 + T0)
-        A = a1*T0**a2 + a3*T0**a4
-        B = -np.exp(b0 + b1*Tf + b2*Tf**7)
-        C = c1*Tf + c2
-        Q1 = A*R**B
-        Q = (R**C + Q1**C)**(1/C)
-        x = alpha*Q**beta
-        
-        self.Zbar = Z * x/(1 + x + np.sqrt(1 + 2*x))      
 
     def plasma_params(self, Z, ni, mi):
         """ Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).
@@ -246,8 +201,10 @@ class SmTransport:
             Atomic mass [g]       
         """
 
-        self.tf_zbar(Z, ni)
+        MI = zbar.MeanIonization(mi, mi*ni, self.T, Z)
 
+        self.Zbar = MI.tf_zbar()
+        
         self.ne = self.Zbar * ni # Compute electron number density [1/cm^3]
 
         self.ai = (4 * np.pi * ni/3)**(-1/3) # Wigner-Seitz radius [cm]

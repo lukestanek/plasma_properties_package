@@ -38,10 +38,7 @@ class MeanIonization:
 
         self.T = T
         if str(type(self.T)) != "<class 'numpy.ndarray'>":
-            self.T = np.array([T])
-            
-        print(self.Am)
-        
+            self.T = np.array([T])       
         
     def tf_zbar(self):
             """ Thomas Fermi Zbar model.

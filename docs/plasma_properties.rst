@@ -4,6 +4,14 @@ plasma\_properties package
 Submodules
 ----------
 
+plasma\_properties.error module
+-------------------------------
+
+.. automodule:: plasma_properties.error
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 plasma\_properties.parameters module
 ------------------------------------
 

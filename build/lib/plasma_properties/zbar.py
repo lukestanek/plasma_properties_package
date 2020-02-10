@@ -1,6 +1,34 @@
 import numpy as np
 
-class MeanIonization:    
+# def ZBAR(Am, mass_density, T, Z, model):
+#     """ Compute the mean ionization state (<Z> or Zbar) for a given system.
+
+#     Parameters
+#     ----------
+#     Am : float or arrary_like
+#         Atomic mass of element (or isotope) in units of grams [g].
+        
+#     mass_density : float or array_like
+#         Range of mass densities in units of grams per 
+#         cubic centimeter [g/cc]. 
+        
+#     T : float or array_like
+#         Temperature range in units of elevtron-volts [eV]
+        
+#     Z : int or arrray_like
+#         Atomic number for each element
+#     """
+
+#     # Instantiate the MeanIonization object
+#     MI = MeanIonization(Am, mass_density, T, Z, model)
+
+#     # Catch incorrect models
+#     try:
+#         return MI.get_zbar()
+#     except:
+#         print('Error in Choice of Model')
+
+class MeanIonization:
     """ Compute the mean ionization state (<Z> or Zbar) for a given system.
 
     Parameters
@@ -13,36 +41,47 @@ class MeanIonization:
         cubic centimeter [g/cc]. 
         
     T : float or array_like
-        Temperature range in units of elevtron-volts [eV]
+        Temperature range in units of electron-volts [eV]
         
     Z : int or arrray_like
         Atomic number for each element
     """
-    
     def __init__(self, Am, mass_density, T, Z):
         
         # Check type of input and deal with float cases
-        self.Am = Am
-        if str(type(self.Am)) != "<class 'numpy.ndarray'>":
+        if str(type(Am)) != "<class 'numpy.ndarray'>":
             self.Am = np.array([Am])
+        else:
+            self.Am = Am
 
-        self.Z = Z
-        if str(type(self.Z)) != "<class 'numpy.ndarray'>":
+        if str(type(Z)) != "<class 'numpy.ndarray'>":
             self.Z = np.array([Z])
+        else:
+            self.Z = Z
             
-        try:
-            self.num_density = np.tile(mass_density, len(Am))/np.repeat(Am, len(mass_density))            
-            self.num_density = np.reshape(self.num_density, (len(Am) ,len(mass_density)))
-        except:
+        if str(type(mass_density)) != "<class 'numpy.ndarray'>":
             self.num_density = np.array([mass_density])/Am
+        else:
+            if len(mass_density) > 1:
+                self.num_density = np.tile(mass_density, len(Am))/np.repeat(Am, len(mass_density))
+                self.num_density = np.reshape(self.num_density, (len(Am) ,len(mass_density)))
+            else:
+                self.num_density = mass_density/Am
 
-        self.T = T
-        if str(type(self.T)) != "<class 'numpy.ndarray'>":
+        if str(type(T)) != "<class 'numpy.ndarray'>":
             self.T = np.array([T])
-            
-        print(self.Am)
-        
-        
+        else:
+            self.T = T
+
+        # # Select model for computing Zbar
+        # if model=='TF':
+        #     self.zbar = self.tf_zbar()
+        # elif model=='SAHA':
+        #     print("Coming Soon")
+
+    # def get_zbar(self):
+    #     return self.zbar
+
     def tf_zbar(self):
             """ Thomas Fermi Zbar model.
 
