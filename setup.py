@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="plasma_properties_package", # Replace with your own username
-    version="0.0.4",
+    version="0.0.7",
     author="Lucas J. Stanek",
     author_email="staneklu@msu.edu",
     description="Compute Plasma Properties",

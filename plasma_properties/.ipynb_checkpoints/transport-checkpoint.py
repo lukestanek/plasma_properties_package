@@ -1,167 +1,39 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from error import *
 import zbar
-# class MultiSpeciesTrans:
 
-#     def __init__(self, Am, mass_densities, Ts, Zs, units_out='star'):
-
-#         # 0th entry of each following array contains element 1 info
-#         # 1st entry of each array contains element 2 info
-#         self.mis = Am
-#         self.Zs = Zs
-#         self.num_densities = mass_densities/Am
-#         self.Ts = Ts
-
-#         self.e_squared = 1.4399644800e-7 # [ev cm]
-#         self.hbar = 6.5822958e-16 # reduced Planck's constant [eV*s]
-#         self.me = 9.1095e-28 # mass of electron [g]
-#         self.units_out = units_out
-
-#     def inter_diffusion(self):
-
-#         n = np.sum(self.num_densitites) # Total number density
-#         rho = np.sum(self.mass_densities) # Total mass density
-#         muij = self.mis[0]*self.mis[1] / np.sum(self.mis) # Reduce mass
-
-#         xi = self.num_densitites/n
-#         zi = self.mass_densities/rho
-
-#         atot = (3/(4 * np.pi *n))**(1/3)
-
-#         ne = self.TF_Zbar(self, self.Zs[0], self.num_densitites[0]) * self.num_densitites[0]
-
-#         Ef = self.hbar**2/(2 * self.me) * (3 * np.pi**2 * self.ne)**(2/3) * 1.60218e-12 # fermi-energy [ev]
-#         lam_e = ( self.Ts**(9/5) + (2/3*Ef)**(9/5) )**(5/9) / (4 * np.pi * ne * self.e_squared) # [cm]
-
-#         gamm_11 = self.Zs[0]*self.Zs[0]*e_squared / (atot * self.Ts)
-#         gamm_22 = self.Zs[2]*self.Zs[2]*e_squared / (atot * self.Ts)
-#         gamm_12 = self.Zs[0]*self.Zs[2]*e_squared / (atot * self.Ts)
-
-#         kappa = atot/lam_e
-
-#         g = gam_12 * np.sqrt(kappa + 3*xi[0]**(-1)*gamma_11/(1 + 3*(xi[0]/zi[0])**(1/3) * gamma_11) + \
-#                                    + 3*xi[1]**(-1)*gamma_22/(1 + 3*(xi[1]/zi[1])**(1/3) * gamma_22))
-
-#         Dij = 3 * self.Ts**(5/2) / (16 * np.sqrt(2 * np.pi * muij) * n * Zi**2 * Zj**2 * e_squared**2 * Knm(g, 1, 1))
-        
-#     def tf_zbar(self, Z, ni):
-
-#         """ Thomas Fermi Zbar model.
-        
-#         Parameters
-#         ----------
-#         Z : int
-#             Atomic number.
-            
-#         ni : float
-#             Number density in units particles per 
-#             cubic centimeter [N/cc].
-      
-#         References
-#         ----------
-#         Finite Temperature Thomas Fermi Charge State using 
-#         R.M. More, "Pressure Ionization, Resonances, and the
-#         Continuity of Bound and Free States", Adv. in Atomic 
-#         Mol. Phys., Vol. 21, p. 332 (Table IV).
-#         """
-        
-#         alpha = 14.3139
-#         beta = 0.6624
-#         a1 = 0.003323
-#         a2 = 0.9718
-#         a3 = 9.26148e-5
-#         a4 = 3.10165
-#         b0 = -1.7630
-#         b1 = 1.43175
-#         b2 = 0.31546
-#         c1 = -0.366667
-#         c2 = 0.983333
-
-#         convert = ni * 1.6726219e-24
-#         R = convert/Z
-#         T0 = self.T/Z**(4./3.)
-#         Tf = T0/(1 + T0)
-#         A = a1*T0**a2 + a3*T0**a4
-#         B = -np.exp(b0 + b1*Tf + b2*Tf**7)
-#         C = c1*Tf + c2
-#         Q1 = A*R**B
-#         Q = (R**C + Q1**C)**(1/C)
-#         x = alpha*Q**beta
-        
-#         self.Zbar = Z * x/(1 + x + np.sqrt(1 + 2*x))
-
-
-#     def knm(self, g, n, m):
-#         """ Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).
-                                        
-#         Parameters
-#         ----------
-#         g : float or array_like
-#             Plasma parameter (eq. 54 from [1]) 
-#         n : int
-#             Subscript for collision intergral Knm (eq. C22 from [1])
-#         m : int
-#             Subscript for collision integral Knm (eq. C22 from [1])
-            
-#         Returns
-#         -------
-#         Knm : array_like
-#             Fit to collision integral (eqs. C22-C24 from [1])
-#         """
-
-#         if n and m == 1:
-#             a = np.array([1.4660, -1.7836, 1.4313, -0.55833, 0.061162])
-#             b = np.array([0.081033, -0.091336, 0.051760, -0.50026, 0.17044])
-            
-#         if n and m == 2:
-#             a = np.array([0.85401, -0.22898, -0.60059, 0.80591, -0.30555])
-#             b = np.array([0.43475, -0.21147, 0.11116, 0.19665, 0.15195])
-            
-#         Knm = np.zeros(len(self.g))
-        
-#         for i in range(len(g)):
-#             g_arr = np.array([g[i], g[i]**2, g[i]**3, g[i]**4, g[i]**5])
-        
-#             if g[i] < 1:
-#                 Knm[i] = -n/4 * np.math.factorial(m - 1) * np.log( np.dot(a,g_arr) ) 
-#             else:
-#                 Knm[i] = (b[0] + b[1]*np.log(g[i]) + b[2]*np.log(g[i])**2)/(1 + b[3]*g[i] + b[4]*g[i]**2)
-
-#         return Knm
-
-class SmTransport:
-    """ Generate the Stanton and Murillo transport coefficients. test
+class SM:
+    """Generate the Stanton and Murillo transport coefficients. test
 
     Parameters
     ----------
     Am : float or arrary_like
         Atomic mass of element (or isotope) in units of grams [g].
-        
+
     mass_density : float or array_like
         Range of mass densities in units of grams per 
         cubic centimeter [g/cc]. 
     T : float or array_like
-        Temperature range in units of elevtron-volts [eV]
-        
+        Temperature range in units of electron-volts [eV]
+
     Z : int or arrray_like
         Atomic number for each element
-        
+   
     units_out : str
         Unit system for resulting transport coefficient.
         Default: dimensionless "star" units.
-    
+
     References
     ----------
-    Stanton, Liam G., and Michael S. Murillo. 
-    "Ionic transport in high-energy-density matter." 
-    Physical Review E 93.4 (2016): 043203.
-
+    .. [1] `Stanton, Liam G., and Michael S. Murillo. "Ionic transport in high-energy-density matter." Physical Review E 93.4 (2016): 043203.
+        <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203>`_
     """
 
     def __init__(self, Am, mass_density, T, Z, units_out='star'):
         """ Initialize all parameters to be shared across methods.
         """
-        
+
         # Check type of input and deal with float cases
         self.mi = Am
         if str(type(self.mi)) != "<class 'numpy.ndarray'>":
@@ -170,23 +42,34 @@ class SmTransport:
         self.Z = Z
         if str(type(self.Z)) != "<class 'numpy.ndarray'>":
             self.Z = np.array([Z])
-            
-        try:
-            self.num_density = np.tile(mass_density, len(Am))/np.repeat(Am, len(mass_density))            
-            self.num_density = np.reshape(self.num_density, (len(Am) ,len(mass_density)))
-        except:
+       
+        if str(type(mass_density)) != "<class 'numpy.ndarray'>":
             self.num_density = np.array([mass_density])/Am
-
+            print
+        else:
+            if len(mass_density) > 1:
+                self.num_density = np.tile(mass_density, len(Am))/np.repeat(Am, len(mass_density))
+                self.num_density = np.reshape(self.num_density, (len(Am) ,len(mass_density)))
+            else:
+                self.num_density = mass_density/Am
+                
         self.T = T
         if str(type(self.T)) != "<class 'numpy.ndarray'>":
-            self.T = np.array([T])
+            self.T = np.array([T])   
+#         # Check input, throw errors
+#         if len(Am) != len(Z):
+#             raise DimensionMismatchError('atomic mass and nuclear charge arrays must be the same size')
+
+#         for X, st in [(self.mi,'Am'), (self.num_density, 'mass_density'), (self.T, 'T'), (self.Z, 'Z')]:
+#             if any(v <= 0 for v in X) :
+#                 raise ValueError('{} values must be > 0'.format(st))
 
         # Class wide parameter definition in cgs units
         self.e_squared = 1.4399644800e-7 # [ev cm]
         self.hbar = 6.5822958e-16 # reduced Planck's constant [eV*s]
         self.me = 9.1095e-28 # mass of electron [g]
         self.units_out = units_out
-            
+        print('Transport coefficients returned in {} units.'.format(self.units_out))
 
     def plasma_params(self, Z, ni, mi):
         """ Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).
@@ -516,3 +399,131 @@ class SmTransport:
                     ax[k].set_xlabel('Density', fontsize=20)
                     
         return fig, ax
+
+# class MultiSpeciesTrans:
+
+#     def __init__(self, Am, mass_densities, Ts, Zs, units_out='star'):
+
+#         # 0th entry of each following array contains element 1 info
+#         # 1st entry of each array contains element 2 info
+#         self.mis = Am
+#         self.Zs = Zs
+#         self.num_densities = mass_densities/Am
+#         self.Ts = Ts
+
+#         self.e_squared = 1.4399644800e-7 # [ev cm]
+#         self.hbar = 6.5822958e-16 # reduced Planck's constant [eV*s]
+#         self.me = 9.1095e-28 # mass of electron [g]
+#         self.units_out = units_out
+
+#     def inter_diffusion(self):
+
+#         n = np.sum(self.num_densitites) # Total number density
+#         rho = np.sum(self.mass_densities) # Total mass density
+#         muij = self.mis[0]*self.mis[1] / np.sum(self.mis) # Reduce mass
+
+#         xi = self.num_densitites/n
+#         zi = self.mass_densities/rho
+
+#         atot = (3/(4 * np.pi *n))**(1/3)
+
+#         ne = self.TF_Zbar(self, self.Zs[0], self.num_densitites[0]) * self.num_densitites[0]
+
+#         Ef = self.hbar**2/(2 * self.me) * (3 * np.pi**2 * self.ne)**(2/3) * 1.60218e-12 # fermi-energy [ev]
+#         lam_e = ( self.Ts**(9/5) + (2/3*Ef)**(9/5) )**(5/9) / (4 * np.pi * ne * self.e_squared) # [cm]
+
+#         gamm_11 = self.Zs[0]*self.Zs[0]*e_squared / (atot * self.Ts)
+#         gamm_22 = self.Zs[2]*self.Zs[2]*e_squared / (atot * self.Ts)
+#         gamm_12 = self.Zs[0]*self.Zs[2]*e_squared / (atot * self.Ts)
+
+#         kappa = atot/lam_e
+
+#         g = gam_12 * np.sqrt(kappa + 3*xi[0]**(-1)*gamma_11/(1 + 3*(xi[0]/zi[0])**(1/3) * gamma_11) + \
+#                                    + 3*xi[1]**(-1)*gamma_22/(1 + 3*(xi[1]/zi[1])**(1/3) * gamma_22))
+
+#         Dij = 3 * self.Ts**(5/2) / (16 * np.sqrt(2 * np.pi * muij) * n * Zi**2 * Zj**2 * e_squared**2 * Knm(g, 1, 1))
+        
+#     def tf_zbar(self, Z, ni):
+
+#         """ Thomas Fermi Zbar model.
+        
+#         Parameters
+#         ----------
+#         Z : int
+#             Atomic number.
+            
+#         ni : float
+#             Number density in units particles per 
+#             cubic centimeter [N/cc].
+      
+#         References
+#         ----------
+#         Finite Temperature Thomas Fermi Charge State using 
+#         R.M. More, "Pressure Ionization, Resonances, and the
+#         Continuity of Bound and Free States", Adv. in Atomic 
+#         Mol. Phys., Vol. 21, p. 332 (Table IV).
+#         """
+        
+#         alpha = 14.3139
+#         beta = 0.6624
+#         a1 = 0.003323
+#         a2 = 0.9718
+#         a3 = 9.26148e-5
+#         a4 = 3.10165
+#         b0 = -1.7630
+#         b1 = 1.43175
+#         b2 = 0.31546
+#         c1 = -0.366667
+#         c2 = 0.983333
+
+#         convert = ni * 1.6726219e-24
+#         R = convert/Z
+#         T0 = self.T/Z**(4./3.)
+#         Tf = T0/(1 + T0)
+#         A = a1*T0**a2 + a3*T0**a4
+#         B = -np.exp(b0 + b1*Tf + b2*Tf**7)
+#         C = c1*Tf + c2
+#         Q1 = A*R**B
+#         Q = (R**C + Q1**C)**(1/C)
+#         x = alpha*Q**beta
+        
+#         self.Zbar = Z * x/(1 + x + np.sqrt(1 + 2*x))
+
+
+#     def knm(self, g, n, m):
+#         """ Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).
+                                        
+#         Parameters
+#         ----------
+#         g : float or array_like
+#             Plasma parameter (eq. 54 from [1]) 
+#         n : int
+#             Subscript for collision intergral Knm (eq. C22 from [1])
+#         m : int
+#             Subscript for collision integral Knm (eq. C22 from [1])
+            
+#         Returns
+#         -------
+#         Knm : array_like
+#             Fit to collision integral (eqs. C22-C24 from [1])
+#         """
+
+#         if n and m == 1:
+#             a = np.array([1.4660, -1.7836, 1.4313, -0.55833, 0.061162])
+#             b = np.array([0.081033, -0.091336, 0.051760, -0.50026, 0.17044])
+            
+#         if n and m == 2:
+#             a = np.array([0.85401, -0.22898, -0.60059, 0.80591, -0.30555])
+#             b = np.array([0.43475, -0.21147, 0.11116, 0.19665, 0.15195])
+            
+#         Knm = np.zeros(len(self.g))
+        
+#         for i in range(len(g)):
+#             g_arr = np.array([g[i], g[i]**2, g[i]**3, g[i]**4, g[i]**5])
+        
+#             if g[i] < 1:
+#                 Knm[i] = -n/4 * np.math.factorial(m - 1) * np.log( np.dot(a,g_arr) ) 
+#             else:
+#                 Knm[i] = (b[0] + b[1]*np.log(g[i]) + b[2]*np.log(g[i])**2)/(1 + b[3]*g[i] + b[4]*g[i]**2)
+
+#         return Knm

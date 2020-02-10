@@ -20,6 +20,14 @@ Open a terminal and type the following command:
     
     $ pip install plasma-properties-package
 
+.. warning:: 
+
+  This package is in its early stages and going through a lot of development. Please check your version for bugfixes and new features. To upgrade your version using pip:
+
+  .. code:: bash
+
+    $pip install plasma-properties-package --upgrade
+
 To Download from GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~
 Open a terminal and type the following command:

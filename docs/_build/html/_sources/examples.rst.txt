@@ -253,7 +253,7 @@ Example: Viscosity versus Density
 Example: Transport for Different Isotopes and Elements
 ******************************************************
 
-As mentioned in the *note* in section `The Transport Module`_, the atomic mass and nuclear charge are coupled. To compute transport for different isotopes of the same element with additional elements, you will need to repeat the nuclear charge in the *Z* array but chance the atomic mass for each isotope. Fig. 2 shows a fiagram of the data strcuture returned for the case of multiple isotopes and elements. 
+As mentioned in the *note* in the first section, the atomic mass and nuclear charge are coupled. To compute transport for different isotopes of the same element with additional elements, you will need to repeat the nuclear charge in the *Z* array but chance the atomic mass for each isotope. Fig. 2 shows a diagram of the data structure returned for the case of multiple isotopes and elements. 
 
 .. figure:: _images/isotope_ex.png
  :width: 450
@@ -276,7 +276,7 @@ As mentioned in the *note* in section `The Transport Module`_, the atomic mass a
    rho_i = 1
 
    # Temperature range [eV]
-   T = np.linspace(0.1, 100, 100)
+   T = np.logspace(-1, 2, 20)
 
    # Nuclear charge for each element - entries correspond to Am array
    Z = np.array([1, 1, 1, 3, 6, 13])
@@ -288,28 +288,94 @@ As mentioned in the *note* in section `The Transport Module`_, the atomic mass a
    D = sm.self_diffusion()
 
    # Plotting
+   cmap1 = plt.cm.get_cmap('Blues')
+   cmap2 = plt.cm.get_cmap('Set1')
    plt.figure(figsize=(10,8))
-   plt.loglog(T, D[0,:,0], 'b-d', linewidth=3, label='Hydrogen')
-   plt.loglog(T, D[0,:,1], 'b-x', linewidth=3, label='Deuterium')
-   plt.loglog(T, D[0,:,2], 'b-v', linewidth=3, label='Tritium')
-   plt.loglog(T, D[0,:,3], linewidth=3, label='Lithium')
-   plt.loglog(T, D[0,:,4], linewidth=3, label='Carbon')
-   plt.loglog(T, D[0,:,5], linewidth=3, label='Aluminum')
+   plt.loglog(T, D[0,:,0], '-d', c=cmap1(125), linewidth=3, label='Hydrogen')
+   plt.loglog(T, D[0,:,1], '-v', c=cmap1(175), linewidth=3, label='Deuterium')
+   plt.loglog(T, D[0,:,2], '-x', c=cmap1(250), linewidth=3, label='Tritium')
+   plt.loglog(T, D[0,:,3], c=cmap2(0), linewidth=3, label='Lithium')
+   plt.loglog(T, D[0,:,4], c=cmap2(2), linewidth=3, label='Carbon')
+   plt.loglog(T, D[0,:,5], c=cmap2(3), linewidth=3, label='Aluminum')
 
    plt.xticks(fontsize=16)
    plt.yticks(fontsize=16)
 
    plt.xlabel('Temperature [eV]', fontsize=18)
    plt.ylabel('Self-Diffusion $[cm^2/s]$', fontsize=18)
-   plt.title('Self-Diffusion for Various Isotopes and Elements', fontsize=18)
+   plt.title('Self-Diffusion for Various Isotopes at $n_i = 10^{22} \; N/cc$', fontsize=18)
    plt.legend(fontsize=18)
-   
+
    plt.show()
 
 .. figure:: _images/isotope_compare.png
  :width: 450
  :align: center
  :alt: Self diffusion for three hydrogen isotopes, lithium, carbon, and aluminum.
+
+ Fig 3. Note that the at first glance, the self-diffusion might be misleading for the above isotopes as hydrogen, a lighter element, diffuses less than tritium a heavier isotope. This is due to the fact that the mass density is kept constant for all atomic masses and the number density is computed inside the *transport* module. To make a comparison between isotopes/elements with the **same number density** see the next example. 
+
+Example: Transport for Different Isotopes at Constant Number Density
+********************************************************************
+
+.. code:: python
+
+   import matplotlib.pyplot as plt
+   import numpy as np
+
+   from plasma_properties import transport
+
+   # Atomic mass [g] for each isotope/element - entries correspond to Z array
+   Am = np.array([1.6735575e-24, 3.344325e-24, 5.0082670843e-24]) 
+
+   # Specify number density
+   ni = 1e+22 # [N/cc]
+
+   # Compute the mass density needed for each isotope
+   rho_i = ni*Am
+
+   # Temperature range [eV]
+   T = np.logspace(-1, 2, 20)
+
+   # Nuclear charge for each element - entries correspond to Am array
+   Z = np.array([1,1,1])
+
+   # Create the stanton-murillo transport object
+   sm = transport.SM(Am, rho_i, T, Z, units_out='cgs')
+
+   # Compute self-diffusion
+   D = sm.self_diffusion()
+
+
+   # IMPORTANT: Note the array indexing in the following plotting command. 
+   # To obtain the correct self-diffusion coefficient for the number density 
+   # set above for each isotope, you must pick the the mass density index that 
+   # corresponds to the isotope layer. For example, D[0,:,0] returns the 
+   # self-diffusion coefficient across the temperature range for hydrogen with 
+   # the ni set above. Similarly, D[1,:,1] returns the self-diffusion coefficient 
+   # for deuterium at ni set above.
+
+   # Plotting
+   cmap = plt.cm.get_cmap('Blues')
+   plt.figure(figsize=(10,8))
+   plt.loglog(T, D[0,:,0], '-d', c=cmap(100), linewidth=3, label='Hydrogen')
+   plt.loglog(T, D[1,:,1], '-v', c=cmap(175), linewidth=3, label='Deuterium')
+   plt.loglog(T, D[2,:,2], '-x', c=cmap(225), linewidth=3, label='Tritium')
+
+   plt.xticks(fontsize=16)
+   plt.yticks(fontsize=16)
+
+   plt.xlabel('Temperature [eV]', fontsize=18)
+   plt.ylabel('Self-Diffusion $[cm^2/s]$', fontsize=18)
+   plt.title('Self-Diffusion for Various Isotopes at $n_i = 10^{22} \; N/cc$', fontsize=18)
+   plt.legend(fontsize=18)
+
+   plt.show()
+
+.. figure:: _images/isotope_num_density_compare.png
+ :width: 450
+ :align: center
+ :alt: Self diffusion for three hydrogen isotopes at a constant number density.
 
 Coming Soon!
 ~~~~~~~~~~~~

@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from error import *
-import zbar
+from plasma_properties import zbar
+from plasma_properties import error
 
 class SM:
     """Generate the Stanton and Murillo transport coefficients. test
-
+    
     Parameters
     ----------
     Am : float or arrary_like
@@ -33,10 +33,9 @@ class SM:
     def __init__(self, Am, mass_density, T, Z, units_out='star'):
         """ Initialize all parameters to be shared across methods.
         """
-
-        # Check input, throw errors
-        if len(Am) != len(Z):
-            raise DimensionMismatchError('atomic mass and nuclear charge arrays must be the same size')
+        for X in [Am, mass_density, T, Z]:
+            if str(type(X)) == "<class 'list'>":
+                raise TypeError('type "list" not supported')
 
         # Check type of input and deal with float cases
         self.mi = Am
@@ -46,24 +45,29 @@ class SM:
         self.Z = Z
         if str(type(self.Z)) != "<class 'numpy.ndarray'>":
             self.Z = np.array([Z])
-            
+       
         if str(type(mass_density)) != "<class 'numpy.ndarray'>":
             self.num_density = np.array([mass_density])/Am
+            print
         else:
             if len(mass_density) > 1:
                 self.num_density = np.tile(mass_density, len(Am))/np.repeat(Am, len(mass_density))
                 self.num_density = np.reshape(self.num_density, (len(Am) ,len(mass_density)))
             else:
                 self.num_density = mass_density/Am
-
+                
         self.T = T
         if str(type(self.T)) != "<class 'numpy.ndarray'>":
             self.T = np.array([T])
 
-        for X, st in [(self.mi,'Am'), (self.num_density, 'mass_density'), (self.T, 'T'), (self.Z, 'Z')]:
-            if any(v <= 0 for v in X) :
-                raise ValueError('{} values must be > 0'.format(st))
+        # Check input, throw errors
+        if len(self.mi) != len(self.Z):
+            raise DimensionMismatchError('atomic mass and nuclear charge arrays must be the same size')
 
+        # for X, st in [(self.mi,'Am'), (self.num_density, 'mass_density'), (self.T, 'T'), (self.Z, 'Z')]:
+        #     print(X)
+        #     if any(v <= 0 for v in X) :
+        #         raise ValueError('{} values must be > 0'.format(st))
 
         # Class wide parameter definition in cgs units
         self.e_squared = 1.4399644800e-7 # [ev cm]
@@ -85,7 +89,7 @@ class SM:
             Atomic mass [g]       
         """
 
-        MI = zbar.MeanIonization(mi, mi*ni, self.T, Z, model='TF')
+        MI = zbar.MeanIonization(mi, mi*ni, self.T, Z)
 
         self.Zbar = MI.tf_zbar()
         

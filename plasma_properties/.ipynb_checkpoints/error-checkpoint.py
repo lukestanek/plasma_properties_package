@@ -9,7 +9,3 @@ class DimensionMismatchError(Error):
 class ValueError(Error):
     """Raised when value is incorrect"""
     pass
-
-class TypeError(Error):
-    """Raised when type is incorrect"""
-    pass
