@@ -85,7 +85,7 @@ class SM:
             Atomic mass [g]       
         """
 
-        MI = zbar.MeanIonization(mi, mi*ni, self.T, Z, model='TF')
+        MI = zbar.MeanIonization(mi, mi*ni, self.T, Z)
 
         self.Zbar = MI.tf_zbar()
         
