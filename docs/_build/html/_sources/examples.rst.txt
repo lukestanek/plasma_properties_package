@@ -40,7 +40,7 @@ To compute a single transport coefficient do the following:
    Z = 6 # Atomic number
 
    # Instantiate the Stanton-Murillo transport class
-   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SM(Am, rho_i, T, Z, units_out='cgs')
    
    # Compute transport coefficients
    D = sm.self_diffusion()
@@ -73,7 +73,7 @@ Below is example input for this case:
    Z = np.array([6, 13, 23]) # Atomic number for each element
 
    # Instantiate the Stanton-Murillo transport class
-   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SM(Am, rho_i, T, Z, units_out='cgs')
 
    # Compute transport 
    D = sm.self_diffusion()
@@ -162,7 +162,7 @@ Example: Thermal Conductivity versus Temperature
    Z = np.array([6, 13, 23]) # atomic numbers of C, Al, and V
 
    # Instantiate the Stanton-Murillo transport submodule
-   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SM(Am, rho_i, T, Z, units_out='cgs')
 
    # Compute Thermal Conductivity
    K = sm.thermal_conductivity()
@@ -223,7 +223,7 @@ Example: Viscosity versus Density
    Z = np.array([6, 13, 23]) # atomic number for each element
 
    # Instantiate the Stanton-Murillo transport submodule
-   sm = transport.SmTransport(Am, rho_i, T, Z, units_out='cgs')
+   sm = transport.SM(Am, rho_i, T, Z, units_out='cgs')
 
    # Compute viscosity
    eta = sm.viscosity()

@@ -202,7 +202,7 @@ Refer to <em>Fig 1.</em> for the structure of the output in the multi-element/ma
 <span class="n">Z</span> <span class="o">=</span> <span class="mi">6</span> <span class="c1"># Atomic number</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute transport coefficients</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
@@ -229,7 +229,7 @@ the same syntax as the single transport case except the inputs are now <code cla
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># Atomic number for each element</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute transport</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
@@ -306,7 +306,7 @@ the code block above:</p>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># atomic numbers of C, Al, and V</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport submodule</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute Thermal Conductivity</span>
 <span class="n">K</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">thermal_conductivity</span><span class="p">()</span>
@@ -363,7 +363,7 @@ the code block above:</p>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># atomic number for each element</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport submodule</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute viscosity</span>
 <span class="n">eta</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">viscosity</span><span class="p">()</span>
