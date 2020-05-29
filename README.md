@@ -6,5 +6,5 @@ Open an terminal and type:
 
 `$ pip install plasma-properties-package`
 
-## Dcoumentation
+## Documentation
 https://lukestanek.github.io/plasma_properties_package/
