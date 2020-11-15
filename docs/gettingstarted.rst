@@ -1,3 +1,9 @@
+.. toctree::
+   :hidden:
+   ./examples
+   ./gallery
+   ./modules
+
 
 Getting Started
 ===============
@@ -26,7 +32,7 @@ Open a terminal and type the following command:
 
   .. code:: bash
 
-    $pip install plasma-properties-package --upgrade
+    $ pip install plasma-properties-package --upgrade
 
 To Download from GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,3 +41,9 @@ Open a terminal and type the following command:
 .. code-block:: bash
 
     $ git clone git@github.com:lukestanek/plasma_properties.git
+
+
+
+NEW header
+~~~~~~~~~~
+this is a test

@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from plasma_properties import zbar
 from plasma_properties import error
+import parameters
 
 class SM:
     """Generate the Stanton and Murillo transport coefficients. test
@@ -27,7 +28,7 @@ class SM:
     References
     ----------
     .. [1] `Stanton, Liam G., and Michael S. Murillo. "Ionic transport in high-energy-density matter." Physical Review E 93.4 (2016): 043203.
-        <https://journals.aps.org/pre/abstract/10.1103/PhysRevE.93.043203>`_
+        <https://doi.org/10.1103/PhysRevE.93.043203>`_
     """
 
     def __init__(self, Am, mass_density, T, Z, units_out='star'):
@@ -261,6 +262,7 @@ class SM:
                 
         # Single mass density, multiple elements        
         elif len(self.num_density.shape) == 1 and len(self.Z) != 1:
+
             eta = np.zeros([1, len(self.T), len(self.Z)])
             
             for k in range(len(self.Z)):
@@ -281,7 +283,8 @@ class SM:
                     print('Please specify a valid unit system for the returned quantities\nCurrent Options: "star", "cgs", "mks"') 
         
         # Multiple mass densities, multiple elements            
-        else:                             
+        else:
+                         
             eta = np.zeros([self.num_density.shape[1], len(self.T), len(self.Z)])
 
             for k in range(len(self.Z)):
@@ -404,6 +407,157 @@ class SM:
                     ax[k].set_xlabel('Density', fontsize=20)
                     
         return fig, ax
+
+
+class YVM:
+    """Compute viscosity from the Murillo viscosity model.
+    
+    Parameters
+    ----------
+    Am : float or arrary_like
+        Atomic mass of element (or isotope) in units of grams [g].
+
+    mass_density : float or array_like
+        Range of mass densities in units of grams per 
+        cubic centimeter [g/cc]. 
+    T : float or array_like
+        Temperature range in units of electron-volts [eV]
+
+    Z : int or arrray_like
+        Atomic number for each element
+   
+    units_out : str
+        Unit system for resulting transport coefficient.
+        Default: dimensionless "star" units.
+
+    References
+    ----------
+    .. [2] `Murillo, M. S. "Viscosity estimates for strongly coupled Yukawa systems." Physical Review E 62.3 (2000): 4115.
+        <https://doi.org/10.1103/PhysRevE.62.4115>`_
+    """
+
+    def __init__(self, Am, mass_density, T, Z, units_out='star'):
+        """ Initialize all parameters to be shared across methods.
+        """
+        for X in [Am, mass_density, T, Z]:
+            if str(type(X)) == "<class 'list'>":
+                raise TypeError('type "list" not supported')
+
+        # Check type of input and deal with float cases
+        self.mi = Am
+        if str(type(self.mi)) != "<class 'numpy.ndarray'>":
+            self.mi = np.array([Am])
+
+        self.Z = Z
+        if str(type(self.Z)) != "<class 'numpy.ndarray'>":
+            self.Z = np.array([Z])
+       
+        if str(type(mass_density)) != "<class 'numpy.ndarray'>":
+            self.num_density = np.array([mass_density])/Am
+            print
+        else:
+            if len(mass_density) > 1:
+                self.num_density = np.tile(mass_density, len(Am))/np.repeat(Am, len(mass_density))
+                self.num_density = np.reshape(self.num_density, (len(Am) ,len(mass_density)))
+            else:
+                self.num_density = mass_density/Am
+                
+        self.T = T
+        if str(type(self.T)) != "<class 'numpy.ndarray'>":
+            self.T = np.array([T])
+
+        # Check input, throw errors
+        if len(self.mi) != len(self.Z):
+            raise DimensionMismatchError('atomic mass and nuclear charge arrays must be the same size')
+
+    def viscosity(self):
+
+        # Single density, single element                              
+        if len(self.num_density.shape) == 1 and len(self.Z) == 1:
+
+            p = parameters.Params(self.mi, self.mi*self.num_density, self.T, self.Z)
+            kappa = p.kappa()
+            gamma = p.gamma()
+            ifreq = p.wp()
+            ai = p.aws()
+                           
+            A = 0.46*kappa**4/(1 + 0.44*kappa**4)
+            B = 1.01*np.exp(-0.92*kappa)
+            C = -3.7e-5 + 9e-4*kappa - 2.9e-4*kappa**2
+
+            gamma_ocp = np.abs(A) + np.abs(B)*gamma + np.abs(C)*gamma**2
+
+            lam = 4*np.pi/3 * (3 * gamma_ocp)**(3/2)
+
+            I1 = (180*gamma_ocp*np.pi**(3/2))**(-1)
+            I2 = (0.49 - 2.23*gamma_ocp**(-1/3))/(60*np.pi**2)
+            I3 = 0.241*gamma_ocp**(1/9)/np.pi**(3/2)
+
+            eta = lam*I1 + (1+lam*I2)**2/(lam*I3)  
+            eta *=  self.mi*self.num_density * ifreq * ai**2
+
+                
+        # Single mass density, multiple elements        
+        elif len(self.num_density.shape) == 1 and len(self.Z) != 1:
+            eta = np.zeros([1, len(self.T), len(self.Z)])
+            
+            for k in range(len(self.Z)):
+
+                p = parameters.Params(self.mi[k], self.mi[k]*self.num_density[k], self.T, self.Z[k])
+                kappa = p.kappa()
+                gamma = p.gamma()
+                ifreq = p.wp()
+                ai = p.aws()
+
+
+                A = 0.46*kappa**4/(1 + 0.44*kappa**4)
+                B = 1.01*np.exp(-0.92*kappa)
+                C = -3.7e-5 + 9e-4*kappa - 2.9e-4*kappa**2
+
+                gamma_ocp = A + B*gamma + C*gamma**2
+
+                lam = 4*np.pi/3 * (3 * gamma_ocp)**(3/2)
+
+                I1 = (180*gamma_ocp*np.pi**(3/2))**(-1)
+                I2 = (0.49 - 2.23*gamma_ocp**(-1/3))/(60*np.pi**2)
+                I3 = 0.241*gamma_ocp**(1/9)/np.pi**(3/2)
+
+                eta_val = lam*I1 + (1+lam*I2)**2/(lam*I3)  
+
+                eta[0,:,k] = eta_val * self.mi[k]*self.num_density[k] * ifreq * ai**2
+        
+        # Multiple mass densities, multiple elements            
+        else:
+                 
+            eta = np.zeros([self.num_density.shape[1], len(self.T), len(self.Z)])
+        
+            for k in range(len(self.Z)):
+                for i in range(self.num_density.shape[1]):
+
+                    p = parameters.Params(self.mi[k], self.mi[k]*self.num_density[k,i], self.T, self.Z[k])
+                    kappa = p.kappa()
+                    gamma = p.gamma()
+                    ifreq = p.wp()
+                    ai = p.aws()
+
+                    A = 0.46*kappa**4/(1 + 0.44*kappa**4)
+                    B = 1.01*np.exp(-0.92*kappa)
+                    C = -3.7e-5 + 9e-4*kappa - 2.9e-4*kappa**2
+
+                    gamma_ocp = A + B*gamma + C*gamma**2
+
+                    lam = 4*np.pi/3 * (3 * gamma_ocp)**(3/2)
+
+                    I1 = (180*gamma_ocp*np.pi**(3/2))**(-1)
+                    I2 = (0.49 - 2.23*gamma_ocp**(-1/3))/(60*np.pi**2)
+                    I3 = 0.241*gamma_ocp**(1/9)/np.pi**(3/2)
+
+                    eta_val = lam*I1 + (1+lam*I2)**2/(lam*I3)  
+
+                    eta[i,:,k] = eta_val * self.mi[k] * self.num_density[k,i] * ifreq * ai**2
+        print('viscosity in units: [g/cm s]')
+        return eta
+
 
 # class MultiSpeciesTrans:
 

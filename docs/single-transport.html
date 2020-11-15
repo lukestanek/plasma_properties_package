@@ -1,0 +1,246 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Computing A Single Transport Coefficient &mdash; Plasma Properties  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Plasma Properties
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usersguide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">plasma_properties</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Plasma Properties</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Computing A Single Transport Coefficient</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/single-transport.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="computing-a-single-transport-coefficient">
+<span id="single-transport"></span><h1>Computing A Single Transport Coefficient<a class="headerlink" href="#computing-a-single-transport-coefficient" title="Permalink to this headline">¶</a></h1>
+<p>This is an example of using <a href="#id1"><span class="problematic" id="id2">`</span></a>~plasma_properties.transport.SM~.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">transport</span>
+
+<span class="n">Am</span> <span class="o">=</span> <span class="mf">1.9944235e-23</span> <span class="c1"># Atomic mass of element [g]</span>
+<span class="n">rho_i</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Mass density [g/cc]</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># Temperature [eV]</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="mi">6</span> <span class="c1"># Nuclear charge for carbon</span>
+
+<span class="c1"># Instantiate the Stanton-Murillo transport submodule</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+
+<span class="c1"># Compute transport coefficients</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
+<span class="n">eta</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">viscosity</span><span class="p">()</span>
+<span class="n">K</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">thermal_conductivity</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output (in cgs units):</p>
+<p><code class="code docutils literal notranslate"><span class="pre">[0.00127858]</span> <span class="pre">[0.00084193]</span> <span class="pre">[21856.10137931]</span></code></p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Lucas J. Stanek, Liam G. Stanton, Michael S. Murillo
+      <span class="lastupdated">
+        Last updated on Nov, 14, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #18453b;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #535054;
+    }
+    .wy-menu-vertical p.caption {
+	  color: #fff;
+	}
+	.wy-menu-vertical a {
+	  color: #eee;
+	}
+	.wy-menu-vertical a:hover {
+    background-color: #18453b;
+  }
+  .wy-nav-content {
+    max-width: 900px !important;
+  }
+  </style>
+
+
+</body>
+</html>

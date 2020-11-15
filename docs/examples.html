@@ -35,9 +35,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="plasma_properties" href="modules.html" />
-    <link rel="prev" title="Getting Started" href="gettingstarted.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,30 +79,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="gettingstarted.html">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-transport-module">The Transport Module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#computing-a-single-transport-coefficient">Computing a Single Transport Coefficient</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#computing-multiple-transport-coefficients">Computing Multiple Transport Coefficients</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#example-thermal-conductivity-versus-temperature">Example: Thermal Conductivity versus Temperature</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#example-viscosity-versus-density">Example: Viscosity versus Density</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#example-transport-for-different-isotopes-and-elements">Example: Transport for Different Isotopes and Elements</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#example-transport-for-different-isotopes-at-constant-number-density">Example: Transport for Different Isotopes at Constant Number Density</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usersguide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 </ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#coming-soon">Coming Soon!</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#the-zbar-module">The Zbar Module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#tf-zbar-for-single-element-versus-temperature">TF_Zbar for Single Element versus Temperature</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tf-zbar-for-multiple-elements-versus-temperature">TF_Zbar for Multiple Elements versus Temperature</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Coming Soon!</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">plasma_properties</a></li>
 </ul>
 
@@ -202,7 +184,7 @@ Refer to <em>Fig 1.</em> for the structure of the output in the multi-element/ma
 <span class="n">Z</span> <span class="o">=</span> <span class="mi">6</span> <span class="c1"># Atomic number</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute transport coefficients</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
@@ -229,7 +211,7 @@ the same syntax as the single transport case except the inputs are now <code cla
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># Atomic number for each element</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport class</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute transport</span>
 <span class="n">D</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">self_diffusion</span><span class="p">()</span>
@@ -306,7 +288,7 @@ the code block above:</p>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># atomic numbers of C, Al, and V</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport submodule</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute Thermal Conductivity</span>
 <span class="n">K</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">thermal_conductivity</span><span class="p">()</span>
@@ -363,7 +345,7 @@ the code block above:</p>
 <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">6</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">23</span><span class="p">])</span> <span class="c1"># atomic number for each element</span>
 
 <span class="c1"># Instantiate the Stanton-Murillo transport submodule</span>
-<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SmTransport</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">sm</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">SM</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="n">rho_i</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute viscosity</span>
 <span class="n">eta</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">viscosity</span><span class="p">()</span>
@@ -622,21 +604,15 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
           </div>
           <footer>
   
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="modules.html" class="btn btn-neutral float-right" title="plasma_properties" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="gettingstarted.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
         &copy; Copyright 2020, Lucas J. Stanek, Liam G. Stanton, Michael S. Murillo
+      <span class="lastupdated">
+        Last updated on Nov, 14, 2020.
+      </span>
 
     </p>
   </div>
@@ -663,7 +639,6 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
   
     
     
-
   <style>
     /* Sidebar header (and topbar for mobile) */
     .wy-side-nav-search, .wy-nav-top {
@@ -685,7 +660,6 @@ is the same structure as <em>Fig. 1</em>. Some example code and plots can be fou
   .wy-nav-content {
     max-width: 900px !important;
   }
-}
   </style>
 
 

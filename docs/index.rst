@@ -8,11 +8,22 @@ Plasma Properties Package
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
-   ./gettingstarted
-   ./examples
+   gettingstarted
+   usersguide
+   gallery
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Documentation
+
    ./modules
+
+.. .. toctree::
+..    :hidden:
+..    ./single-transport
+..    ./multiple-transport
 
 Indices and tables
 ==================

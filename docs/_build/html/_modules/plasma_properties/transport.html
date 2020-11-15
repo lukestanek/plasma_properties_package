@@ -1,0 +1,909 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>plasma_properties.transport &mdash; Plasma Properties  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Plasma Properties
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../gettingstarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usersguide.html">User’s Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">plasma_properties</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Plasma Properties</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>plasma_properties.transport</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for plasma_properties.transport</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">zbar</span>
+<span class="kn">from</span> <span class="nn">plasma_properties</span> <span class="kn">import</span> <span class="n">error</span>
+<span class="kn">import</span> <span class="nn">parameters</span>
+
+<div class="viewcode-block" id="SM"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM">[docs]</a><span class="k">class</span> <span class="nc">SM</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generate the Stanton and Murillo transport coefficients. test</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Am : float or arrary_like</span>
+<span class="sd">        Atomic mass of element (or isotope) in units of grams [g].</span>
+
+<span class="sd">    mass_density : float or array_like</span>
+<span class="sd">        Range of mass densities in units of grams per </span>
+<span class="sd">        cubic centimeter [g/cc]. </span>
+<span class="sd">    T : float or array_like</span>
+<span class="sd">        Temperature range in units of electron-volts [eV]</span>
+
+<span class="sd">    Z : int or arrray_like</span>
+<span class="sd">        Atomic number for each element</span>
+<span class="sd">   </span>
+<span class="sd">    units_out : str</span>
+<span class="sd">        Unit system for resulting transport coefficient.</span>
+<span class="sd">        Default: dimensionless &quot;star&quot; units.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] `Stanton, Liam G., and Michael S. Murillo. &quot;Ionic transport in high-energy-density matter.&quot; Physical Review E 93.4 (2016): 043203.</span>
+<span class="sd">        &lt;https://doi.org/10.1103/PhysRevE.93.043203&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Am</span><span class="p">,</span> <span class="n">mass_density</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize all parameters to be shared across methods.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Am</span><span class="p">,</span> <span class="n">mass_density</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="o">==</span> <span class="s2">&quot;&lt;class &#39;list&#39;&gt;&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;type &quot;list&quot; not supported&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check type of input and deal with float cases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mi</span> <span class="o">=</span> <span class="n">Am</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Am</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Z</span><span class="p">])</span>
+       
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mass_density</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mass_density</span><span class="p">])</span><span class="o">/</span><span class="n">Am</span>
+            <span class="nb">print</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mass_density</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">mass_density</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Am</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mass_density</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Am</span><span class="p">)</span> <span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">mass_density</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">mass_density</span><span class="o">/</span><span class="n">Am</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">T</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">T</span><span class="p">])</span>
+
+        <span class="c1"># Check input, throw errors</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DimensionMismatchError</span><span class="p">(</span><span class="s1">&#39;atomic mass and nuclear charge arrays must be the same size&#39;</span><span class="p">)</span>
+
+        <span class="c1"># for X, st in [(self.mi,&#39;Am&#39;), (self.num_density, &#39;mass_density&#39;), (self.T, &#39;T&#39;), (self.Z, &#39;Z&#39;)]:</span>
+        <span class="c1">#     print(X)</span>
+        <span class="c1">#     if any(v &lt;= 0 for v in X) :</span>
+        <span class="c1">#         raise ValueError(&#39;{} values must be &gt; 0&#39;.format(st))</span>
+
+        <span class="c1"># Class wide parameter definition in cgs units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">e_squared</span> <span class="o">=</span> <span class="mf">1.4399644800e-7</span> <span class="c1"># [ev cm]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbar</span> <span class="o">=</span> <span class="mf">6.5822958e-16</span> <span class="c1"># reduced Planck&#39;s constant [eV*s]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">me</span> <span class="o">=</span> <span class="mf">9.1095e-28</span> <span class="c1"># mass of electron [g]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">=</span> <span class="n">units_out</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Transport coefficients returned in </span><span class="si">{}</span><span class="s1"> units.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">units_out</span><span class="p">))</span>
+
+<div class="viewcode-block" id="SM.plasma_params"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM.plasma_params">[docs]</a>    <span class="k">def</span> <span class="nf">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">ni</span><span class="p">,</span> <span class="n">mi</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</span>
+<span class="sd">                                        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Z : int</span>
+<span class="sd">            Atomic number </span>
+<span class="sd">        ni : float</span>
+<span class="sd">            Number density [1/cc]</span>
+<span class="sd">        mi : float</span>
+<span class="sd">            Atomic mass [g]       </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">MI</span> <span class="o">=</span> <span class="n">zbar</span><span class="o">.</span><span class="n">MeanIonization</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span> <span class="n">mi</span><span class="o">*</span><span class="n">ni</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Zbar</span> <span class="o">=</span> <span class="n">MI</span><span class="o">.</span><span class="n">tf_zbar</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbar</span> <span class="o">*</span> <span class="n">ni</span> <span class="c1"># Compute electron number density [1/cm^3]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ni</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Wigner-Seitz radius [cm]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbar</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_squared</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="c1"># Coulomb coupling parameter</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbar</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ni</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_squared</span><span class="o">/</span> <span class="n">mi</span> <span class="o">*</span> <span class="mf">1.60218e-12</span><span class="p">)</span> <span class="c1"># Plasma frequency [1/s]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ef</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hbar</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">me</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.60218e-12</span> <span class="c1"># fermi-energy [ev]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lam_sq</span> <span class="o">=</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">**</span><span class="p">(</span><span class="mi">9</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Ef</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">9</span><span class="o">/</span><span class="mi">5</span><span class="p">)</span> <span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ne</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_squared</span><span class="p">)</span> <span class="c1"># [cm]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kappa</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lam_sq</span><span class="p">)</span> <span class="c1"># inverse screening length # [1]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">g</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">kappa</span><span class="o">**</span><span class="mi">2</span>  <span class="o">+</span> <span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)</span> <span class="p">))</span> <span class="c1"># Plasma parameter</span></div>
+        
+        
+<div class="viewcode-block" id="SM.knm"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM.knm">[docs]</a>    <span class="k">def</span> <span class="nf">knm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</span>
+<span class="sd">                                        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        g : float or array_like</span>
+<span class="sd">            Plasma parameter (eq. 54 from [1]) </span>
+<span class="sd">        n : int</span>
+<span class="sd">            Subscript for collision intergral Knm (eq. C22 from [1])</span>
+<span class="sd">        m : int</span>
+<span class="sd">            Subscript for collision integral Knm (eq. C22 from [1])</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        knm : array_like</span>
+<span class="sd">            Fit to collision integral (eqs. C22-C24 from [1])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.4660</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.7836</span><span class="p">,</span> <span class="mf">1.4313</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.55833</span><span class="p">,</span> <span class="mf">0.061162</span><span class="p">])</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.081033</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.091336</span><span class="p">,</span> <span class="mf">0.051760</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.50026</span><span class="p">,</span> <span class="mf">0.17044</span><span class="p">])</span>
+            
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.85401</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.22898</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.60059</span><span class="p">,</span> <span class="mf">0.80591</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.30555</span><span class="p">])</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.43475</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.21147</span><span class="p">,</span> <span class="mf">0.11116</span><span class="p">,</span> <span class="mf">0.19665</span><span class="p">,</span> <span class="mf">0.15195</span><span class="p">])</span>
+            
+        <span class="n">knm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">))</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">)):</span>
+            <span class="n">g_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">4</span><span class="p">,</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">5</span><span class="p">])</span>
+        
+            <span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">knm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">g_arr</span><span class="p">)</span> <span class="p">)</span> 
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">knm</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">*</span><span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">knm</span></div>
+
+    
+<div class="viewcode-block" id="SM.self_diffusion"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM.self_diffusion">[docs]</a>    <span class="k">def</span> <span class="nf">self_diffusion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Computes the self-diffusion coefficient using eq. 56 from [1].</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        D : float or array_like</span>
+<span class="sd">            Self-diffusion coefficients for system parameters.</span>
+<span class="sd">            </span>
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The structure in which D is returned is in the form of a 3D array (1D if single value inputs). </span>
+<span class="sd">        The first axis corresponds to density, the second is temperature, and the third is atomic number. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Single density, single element</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">)</span>
+ 
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> 
+                
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Single mass density, multiple elements</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                    <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                    <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> 
+
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                    <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>       
+
+        <span class="c1"># Multiple mass densities, multiple elements</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                        <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                        <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>\
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> 
+                        
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                        <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> \
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+                        
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>            
+        <span class="k">return</span> <span class="n">D</span></div>
+    
+<div class="viewcode-block" id="SM.viscosity"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM.viscosity">[docs]</a>    <span class="k">def</span> <span class="nf">viscosity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the viscosity coefficient using eq. 75 from [1].</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        eta : float or array_like</span>
+<span class="sd">            Viscosity coefficients for system parameters.</span>
+<span class="sd">            </span>
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The structure in which eta is returned is in the form of a 3D array (1D if single value inputs). </span>
+<span class="sd">        The first axis corresponds to density, the second is temperature, and the third is atomic number. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Single density, single element                              </span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                           
+            <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>      
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> 
+                
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                <span class="n">eta</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>
+                
+        <span class="c1"># Single mass density, multiple elements        </span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                    <span class="n">eta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>      
+
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                    <span class="n">eta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span>
+                   
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                    <span class="n">eta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span> 
+        
+        <span class="c1"># Multiple mass densities, multiple elements            </span>
+        <span class="k">else</span><span class="p">:</span>
+                         
+            <span class="n">eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                        <span class="n">eta</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>      
+
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                        <span class="n">eta</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> 
+                
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                        <span class="n">eta</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">36</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>     
+        <span class="k">return</span> <span class="n">eta</span></div>
+        
+<div class="viewcode-block" id="SM.thermal_conductivity"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM.thermal_conductivity">[docs]</a>    <span class="k">def</span> <span class="nf">thermal_conductivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the ion thermal conductivity coefficient using eq. 82 from [1].</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        K : float or array_like</span>
+<span class="sd">            Ion thermal conductivity coefficients for system parameters.</span>
+<span class="sd">            </span>
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The structure in which K is returned is in the form of a 3D array (1D if single value inputs). </span>
+<span class="sd">        The first axis corresponds to density, the second is temperature, and the third is atomic number. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Single density, single element</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                <span class="n">K</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                <span class="n">K</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">1.380649e-16</span> <span class="c1"># eV K^{-1}</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                <span class="n">K</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">1.380649e-16</span> <span class="c1"># eV K^{-1}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>       
+                    
+        <span class="c1"># Single mass density, multiple elements</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">1.380649e-16</span> <span class="c1"># eV K^{-1}</span>
+                    
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                    <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">1.380649e-16</span> <span class="c1"># eV K^{-1}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>       
+        
+        <span class="c1"># Multiple mass densities, multiple elements                                     </span>
+        <span class="k">else</span><span class="p">:</span>                                 
+            <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">plasma_params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;star&#39;</span><span class="p">:</span>
+                        <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;cgs&#39;</span><span class="p">:</span>
+                        <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">1.380649e-16</span> <span class="c1"># eV K^{-1}</span>
+                        
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">units_out</span> <span class="o">==</span> <span class="s1">&#39;mks&#39;</span><span class="p">:</span>
+                        <span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="mi">25</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="p">)</span><span class="o">/</span><span class="p">(</span> <span class="mi">48</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">knm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="p">)</span> \
+                        <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wp</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mf">1.380649e-16</span> <span class="c1"># eV K^{-1}</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Please specify a valid unit system for the returned quantities</span><span class="se">\n</span><span class="s1">Current Options: &quot;star&quot;, &quot;cgs&quot;, &quot;mks&quot;&#39;</span><span class="p">)</span>          
+        <span class="k">return</span> <span class="n">K</span></div>
+    
+    
+<div class="viewcode-block" id="SM.plot"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.SM.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">xaxis</span><span class="o">=</span><span class="s1">&#39;temeprature&#39;</span><span class="p">):</span>
+        
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Very rough preliminary plotting method.... in development.</span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">xaxis</span> <span class="o">==</span> <span class="s1">&#39;temperature&#39;</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Z = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$n_i =$ </span><span class="si">{:.4e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]))</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> 
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> 
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">xaxis</span> <span class="o">==</span> <span class="s1">&#39;density&#39;</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)):</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">loglog</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">[:,</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$T =$ </span><span class="si">{:.4e}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                    <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Density&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+                    
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div></div>
+
+
+<div class="viewcode-block" id="YVM"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.YVM">[docs]</a><span class="k">class</span> <span class="nc">YVM</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Compute viscosity from the Murillo viscosity model.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Am : float or arrary_like</span>
+<span class="sd">        Atomic mass of element (or isotope) in units of grams [g].</span>
+
+<span class="sd">    mass_density : float or array_like</span>
+<span class="sd">        Range of mass densities in units of grams per </span>
+<span class="sd">        cubic centimeter [g/cc]. </span>
+<span class="sd">    T : float or array_like</span>
+<span class="sd">        Temperature range in units of electron-volts [eV]</span>
+
+<span class="sd">    Z : int or arrray_like</span>
+<span class="sd">        Atomic number for each element</span>
+<span class="sd">   </span>
+<span class="sd">    units_out : str</span>
+<span class="sd">        Unit system for resulting transport coefficient.</span>
+<span class="sd">        Default: dimensionless &quot;star&quot; units.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [2] `Murillo, M. S. &quot;Viscosity estimates for strongly coupled Yukawa systems.&quot; Physical Review E 62.3 (2000): 4115.</span>
+<span class="sd">        &lt;https://doi.org/10.1103/PhysRevE.62.4115&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Am</span><span class="p">,</span> <span class="n">mass_density</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">units_out</span><span class="o">=</span><span class="s1">&#39;star&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize all parameters to be shared across methods.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Am</span><span class="p">,</span> <span class="n">mass_density</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Z</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="o">==</span> <span class="s2">&quot;&lt;class &#39;list&#39;&gt;&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;type &quot;list&quot; not supported&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check type of input and deal with float cases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mi</span> <span class="o">=</span> <span class="n">Am</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Am</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">Z</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Z</span><span class="p">])</span>
+       
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mass_density</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mass_density</span><span class="p">])</span><span class="o">/</span><span class="n">Am</span>
+            <span class="nb">print</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mass_density</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">mass_density</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">Am</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">Am</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mass_density</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Am</span><span class="p">)</span> <span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">mass_density</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">=</span> <span class="n">mass_density</span><span class="o">/</span><span class="n">Am</span>
+                
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">T</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">&quot;&lt;class &#39;numpy.ndarray&#39;&gt;&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">T</span><span class="p">])</span>
+
+        <span class="c1"># Check input, throw errors</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DimensionMismatchError</span><span class="p">(</span><span class="s1">&#39;atomic mass and nuclear charge arrays must be the same size&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="YVM.viscosity"><a class="viewcode-back" href="../../plasma_properties.html#plasma_properties.transport.YVM.viscosity">[docs]</a>    <span class="k">def</span> <span class="nf">viscosity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># Single density, single element                              </span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="n">p</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span>
+            <span class="n">kappa</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">kappa</span><span class="p">()</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">gamma</span><span class="p">()</span>
+            <span class="n">ifreq</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">wp</span><span class="p">()</span>
+            <span class="n">ai</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">aws</span><span class="p">()</span>
+                           
+            <span class="n">A</span> <span class="o">=</span> <span class="mf">0.46</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.44</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">B</span> <span class="o">=</span> <span class="mf">1.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.92</span><span class="o">*</span><span class="n">kappa</span><span class="p">)</span>
+            <span class="n">C</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.7e-5</span> <span class="o">+</span> <span class="mf">9e-4</span><span class="o">*</span><span class="n">kappa</span> <span class="o">-</span> <span class="mf">2.9e-4</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="n">gamma_ocp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="o">*</span><span class="n">gamma</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">*</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span>
+
+            <span class="n">lam</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">gamma_ocp</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">I1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">180</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">I2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.49</span> <span class="o">-</span> <span class="mf">2.23</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">I3</span> <span class="o">=</span> <span class="mf">0.241</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">eta</span> <span class="o">=</span> <span class="n">lam</span><span class="o">*</span><span class="n">I1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">lam</span><span class="o">*</span><span class="n">I2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">lam</span><span class="o">*</span><span class="n">I3</span><span class="p">)</span>  
+            <span class="n">eta</span> <span class="o">*=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span> <span class="o">*</span> <span class="n">ifreq</span> <span class="o">*</span> <span class="n">ai</span><span class="o">**</span><span class="mi">2</span>
+
+                
+        <span class="c1"># Single mass density, multiple elements        </span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+            
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+
+                <span class="n">p</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">kappa</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">kappa</span><span class="p">()</span>
+                <span class="n">gamma</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">gamma</span><span class="p">()</span>
+                <span class="n">ifreq</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">wp</span><span class="p">()</span>
+                <span class="n">ai</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">aws</span><span class="p">()</span>
+
+
+                <span class="n">A</span> <span class="o">=</span> <span class="mf">0.46</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.44</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+                <span class="n">B</span> <span class="o">=</span> <span class="mf">1.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.92</span><span class="o">*</span><span class="n">kappa</span><span class="p">)</span>
+                <span class="n">C</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.7e-5</span> <span class="o">+</span> <span class="mf">9e-4</span><span class="o">*</span><span class="n">kappa</span> <span class="o">-</span> <span class="mf">2.9e-4</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">2</span>
+
+                <span class="n">gamma_ocp</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">B</span><span class="o">*</span><span class="n">gamma</span> <span class="o">+</span> <span class="n">C</span><span class="o">*</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span>
+
+                <span class="n">lam</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">gamma_ocp</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+                <span class="n">I1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">180</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">I2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.49</span> <span class="o">-</span> <span class="mf">2.23</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">I3</span> <span class="o">=</span> <span class="mf">0.241</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+                <span class="n">eta_val</span> <span class="o">=</span> <span class="n">lam</span><span class="o">*</span><span class="n">I1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">lam</span><span class="o">*</span><span class="n">I2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">lam</span><span class="o">*</span><span class="n">I3</span><span class="p">)</span>  
+
+                <span class="n">eta</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta_val</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">ifreq</span> <span class="o">*</span> <span class="n">ai</span><span class="o">**</span><span class="mi">2</span>
+        
+        <span class="c1"># Multiple mass densities, multiple elements            </span>
+        <span class="k">else</span><span class="p">:</span>
+                 
+            <span class="n">eta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)])</span>
+        
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Params</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                    <span class="n">kappa</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">kappa</span><span class="p">()</span>
+                    <span class="n">gamma</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">gamma</span><span class="p">()</span>
+                    <span class="n">ifreq</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">wp</span><span class="p">()</span>
+                    <span class="n">ai</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">aws</span><span class="p">()</span>
+
+                    <span class="n">A</span> <span class="o">=</span> <span class="mf">0.46</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">4</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.44</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>
+                    <span class="n">B</span> <span class="o">=</span> <span class="mf">1.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.92</span><span class="o">*</span><span class="n">kappa</span><span class="p">)</span>
+                    <span class="n">C</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.7e-5</span> <span class="o">+</span> <span class="mf">9e-4</span><span class="o">*</span><span class="n">kappa</span> <span class="o">-</span> <span class="mf">2.9e-4</span><span class="o">*</span><span class="n">kappa</span><span class="o">**</span><span class="mi">2</span>
+
+                    <span class="n">gamma_ocp</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">B</span><span class="o">*</span><span class="n">gamma</span> <span class="o">+</span> <span class="n">C</span><span class="o">*</span><span class="n">gamma</span><span class="o">**</span><span class="mi">2</span>
+
+                    <span class="n">lam</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">gamma_ocp</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+                    <span class="n">I1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">180</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">I2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.49</span> <span class="o">-</span> <span class="mf">2.23</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">I3</span> <span class="o">=</span> <span class="mf">0.241</span><span class="o">*</span><span class="n">gamma_ocp</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">9</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+                    <span class="n">eta_val</span> <span class="o">=</span> <span class="n">lam</span><span class="o">*</span><span class="n">I1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">lam</span><span class="o">*</span><span class="n">I2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="n">lam</span><span class="o">*</span><span class="n">I3</span><span class="p">)</span>  
+
+                    <span class="n">eta</span><span class="p">[</span><span class="n">i</span><span class="p">,:,</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">eta_val</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mi</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_density</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">ifreq</span> <span class="o">*</span> <span class="n">ai</span><span class="o">**</span><span class="mi">2</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;viscosity in units: [g/cm s]&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">eta</span></div></div>
+
+
+<span class="c1"># class MultiSpeciesTrans:</span>
+
+<span class="c1">#     def __init__(self, Am, mass_densities, Ts, Zs, units_out=&#39;star&#39;):</span>
+
+<span class="c1">#         # 0th entry of each following array contains element 1 info</span>
+<span class="c1">#         # 1st entry of each array contains element 2 info</span>
+<span class="c1">#         self.mis = Am</span>
+<span class="c1">#         self.Zs = Zs</span>
+<span class="c1">#         self.num_densities = mass_densities/Am</span>
+<span class="c1">#         self.Ts = Ts</span>
+
+<span class="c1">#         self.e_squared = 1.4399644800e-7 # [ev cm]</span>
+<span class="c1">#         self.hbar = 6.5822958e-16 # reduced Planck&#39;s constant [eV*s]</span>
+<span class="c1">#         self.me = 9.1095e-28 # mass of electron [g]</span>
+<span class="c1">#         self.units_out = units_out</span>
+
+<span class="c1">#     def inter_diffusion(self):</span>
+
+<span class="c1">#         n = np.sum(self.num_densitites) # Total number density</span>
+<span class="c1">#         rho = np.sum(self.mass_densities) # Total mass density</span>
+<span class="c1">#         muij = self.mis[0]*self.mis[1] / np.sum(self.mis) # Reduce mass</span>
+
+<span class="c1">#         xi = self.num_densitites/n</span>
+<span class="c1">#         zi = self.mass_densities/rho</span>
+
+<span class="c1">#         atot = (3/(4 * np.pi *n))**(1/3)</span>
+
+<span class="c1">#         ne = self.TF_Zbar(self, self.Zs[0], self.num_densitites[0]) * self.num_densitites[0]</span>
+
+<span class="c1">#         Ef = self.hbar**2/(2 * self.me) * (3 * np.pi**2 * self.ne)**(2/3) * 1.60218e-12 # fermi-energy [ev]</span>
+<span class="c1">#         lam_e = ( self.Ts**(9/5) + (2/3*Ef)**(9/5) )**(5/9) / (4 * np.pi * ne * self.e_squared) # [cm]</span>
+
+<span class="c1">#         gamm_11 = self.Zs[0]*self.Zs[0]*e_squared / (atot * self.Ts)</span>
+<span class="c1">#         gamm_22 = self.Zs[2]*self.Zs[2]*e_squared / (atot * self.Ts)</span>
+<span class="c1">#         gamm_12 = self.Zs[0]*self.Zs[2]*e_squared / (atot * self.Ts)</span>
+
+<span class="c1">#         kappa = atot/lam_e</span>
+
+<span class="c1">#         g = gam_12 * np.sqrt(kappa + 3*xi[0]**(-1)*gamma_11/(1 + 3*(xi[0]/zi[0])**(1/3) * gamma_11) + \</span>
+<span class="c1">#                                    + 3*xi[1]**(-1)*gamma_22/(1 + 3*(xi[1]/zi[1])**(1/3) * gamma_22))</span>
+
+<span class="c1">#         Dij = 3 * self.Ts**(5/2) / (16 * np.sqrt(2 * np.pi * muij) * n * Zi**2 * Zj**2 * e_squared**2 * Knm(g, 1, 1))</span>
+        
+<span class="c1">#     def tf_zbar(self, Z, ni):</span>
+
+<span class="c1">#         &quot;&quot;&quot; Thomas Fermi Zbar model.</span>
+        
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         Z : int</span>
+<span class="c1">#             Atomic number.</span>
+            
+<span class="c1">#         ni : float</span>
+<span class="c1">#             Number density in units particles per </span>
+<span class="c1">#             cubic centimeter [N/cc].</span>
+      
+<span class="c1">#         References</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         Finite Temperature Thomas Fermi Charge State using </span>
+<span class="c1">#         R.M. More, &quot;Pressure Ionization, Resonances, and the</span>
+<span class="c1">#         Continuity of Bound and Free States&quot;, Adv. in Atomic </span>
+<span class="c1">#         Mol. Phys., Vol. 21, p. 332 (Table IV).</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+        
+<span class="c1">#         alpha = 14.3139</span>
+<span class="c1">#         beta = 0.6624</span>
+<span class="c1">#         a1 = 0.003323</span>
+<span class="c1">#         a2 = 0.9718</span>
+<span class="c1">#         a3 = 9.26148e-5</span>
+<span class="c1">#         a4 = 3.10165</span>
+<span class="c1">#         b0 = -1.7630</span>
+<span class="c1">#         b1 = 1.43175</span>
+<span class="c1">#         b2 = 0.31546</span>
+<span class="c1">#         c1 = -0.366667</span>
+<span class="c1">#         c2 = 0.983333</span>
+
+<span class="c1">#         convert = ni * 1.6726219e-24</span>
+<span class="c1">#         R = convert/Z</span>
+<span class="c1">#         T0 = self.T/Z**(4./3.)</span>
+<span class="c1">#         Tf = T0/(1 + T0)</span>
+<span class="c1">#         A = a1*T0**a2 + a3*T0**a4</span>
+<span class="c1">#         B = -np.exp(b0 + b1*Tf + b2*Tf**7)</span>
+<span class="c1">#         C = c1*Tf + c2</span>
+<span class="c1">#         Q1 = A*R**B</span>
+<span class="c1">#         Q = (R**C + Q1**C)**(1/C)</span>
+<span class="c1">#         x = alpha*Q**beta</span>
+        
+<span class="c1">#         self.Zbar = Z * x/(1 + x + np.sqrt(1 + 2*x))</span>
+
+
+<span class="c1">#     def knm(self, g, n, m):</span>
+<span class="c1">#         &quot;&quot;&quot; Computes the plasma parameters (e.g. ion plasma frequency, ion-sphere radius, coupling parameter, etc.).</span>
+                                        
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         g : float or array_like</span>
+<span class="c1">#             Plasma parameter (eq. 54 from [1]) </span>
+<span class="c1">#         n : int</span>
+<span class="c1">#             Subscript for collision intergral Knm (eq. C22 from [1])</span>
+<span class="c1">#         m : int</span>
+<span class="c1">#             Subscript for collision integral Knm (eq. C22 from [1])</span>
+            
+<span class="c1">#         Returns</span>
+<span class="c1">#         -------</span>
+<span class="c1">#         Knm : array_like</span>
+<span class="c1">#             Fit to collision integral (eqs. C22-C24 from [1])</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+
+<span class="c1">#         if n and m == 1:</span>
+<span class="c1">#             a = np.array([1.4660, -1.7836, 1.4313, -0.55833, 0.061162])</span>
+<span class="c1">#             b = np.array([0.081033, -0.091336, 0.051760, -0.50026, 0.17044])</span>
+            
+<span class="c1">#         if n and m == 2:</span>
+<span class="c1">#             a = np.array([0.85401, -0.22898, -0.60059, 0.80591, -0.30555])</span>
+<span class="c1">#             b = np.array([0.43475, -0.21147, 0.11116, 0.19665, 0.15195])</span>
+            
+<span class="c1">#         Knm = np.zeros(len(self.g))</span>
+        
+<span class="c1">#         for i in range(len(g)):</span>
+<span class="c1">#             g_arr = np.array([g[i], g[i]**2, g[i]**3, g[i]**4, g[i]**5])</span>
+        
+<span class="c1">#             if g[i] &lt; 1:</span>
+<span class="c1">#                 Knm[i] = -n/4 * np.math.factorial(m - 1) * np.log( np.dot(a,g_arr) ) </span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 Knm[i] = (b[0] + b[1]*np.log(g[i]) + b[2]*np.log(g[i])**2)/(1 + b[3]*g[i] + b[4]*g[i]**2)</span>
+
+<span class="c1">#         return Knm</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Lucas J. Stanek, Liam G. Stanton, Michael S. Murillo
+      <span class="lastupdated">
+        Last updated on Nov, 14, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #18453b;
+    }
+    /* Sidebar */
+    .wy-nav-side {
+      background: #535054;
+    }
+    .wy-menu-vertical p.caption {
+	  color: #fff;
+	}
+	.wy-menu-vertical a {
+	  color: #eee;
+	}
+	.wy-menu-vertical a:hover {
+    background-color: #18453b;
+  }
+  .wy-nav-content {
+    max-width: 900px !important;
+  }
+  </style>
+
+
+</body>
+</html>
