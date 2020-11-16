@@ -1,5 +1,5 @@
 import numpy as np
-import zbar
+from plasma_properties import zbar
 
 class Params:
     """Compute common plasma parameters.

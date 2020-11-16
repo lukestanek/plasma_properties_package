@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from plasma_properties import zbar
 from plasma_properties import error
-import parameters
+from plasma_properties import parameters
 
 class SM:
     """Generate the Stanton and Murillo transport coefficients. test
@@ -470,7 +470,7 @@ class YVM:
         if len(self.mi) != len(self.Z):
             raise DimensionMismatchError('atomic mass and nuclear charge arrays must be the same size')
 
-    def viscosity(self):
+    def viscosity_00(self):
 
         # Single density, single element                              
         if len(self.num_density.shape) == 1 and len(self.Z) == 1:
@@ -557,6 +557,72 @@ class YVM:
                     eta[i,:,k] = eta_val * self.mi[k] * self.num_density[k,i] * ifreq * ai**2
         print('viscosity in units: [g/cm s]')
         return eta
+
+
+    def viscosity_08(self):
+
+         # Single density, single element                              
+        if len(self.num_density.shape) == 1 and len(self.Z) == 1:
+
+            p = parameters.Params(self.mi, self.mi*self.num_density, self.T, self.Z)
+            kappa = p.kappa()
+            gamma = p.gamma()
+            ifreq = p.wp()
+            ai = p.aws()
+            
+            gamma_m = 171.8 + 82.8*(np.exp(0.565*kappa**1.38) - 1)
+            e_freq_norm = ifreq*np.exp(-0.2*kappa**1.62) 
+            
+            eta = (0.0051*gamma_m/gamma + 0.374*gamma/gamma_m + 0.022) * e_freq_norm *  self.mi * self.num_density  * ai**2
+
+
+        # Single mass density, multiple elements        
+        elif len(self.num_density.shape) == 1 and len(self.Z) != 1:
+            eta = np.zeros([1, len(self.T), len(self.Z)])
+            
+            for k in range(len(self.Z)):
+
+                p = parameters.Params(self.mi[k], self.mi[k]*self.num_density[k], self.T, self.Z[k])
+                kappa = p.kappa()
+                gamma = p.gamma()
+                ifreq = p.wp()
+                ai = p.aws()
+
+                gamma_m = 171.8 + 82.8*(np.exp(0.565*kappa**1.38) - 1)
+                e_freq_norm = ifreq*np.exp(-0.2*kappa**1.62) 
+                
+                eta_val = (0.0051*gamma_m/gamma + 0.374*gamma/gamma_m + 0.022) 
+
+                eta[0,:,k] = eta_val * e_freq_norm *  self.mi[k] * self.num_density[k] * ai**2
+
+
+        # Multiple mass densities, multiple elements            
+        else:
+                 
+            eta = np.zeros([self.num_density.shape[1], len(self.T), len(self.Z)])
+        
+            for k in range(len(self.Z)):
+                for i in range(self.num_density.shape[1]):
+
+                    p = parameters.Params(self.mi[k], self.mi[k]*self.num_density[k,i], self.T, self.Z[k])
+                    kappa = p.kappa()
+                    gamma = p.gamma()
+                    ifreq = p.wp()
+                    ai = p.aws()
+
+                    gamma_m = 171.8 + 82.8*(np.exp(0.565*kappa**1.38) - 1)
+                    e_freq_norm = ifreq*np.exp(-0.2*kappa**1.62) 
+                    
+                    eta_val = (0.0051*gamma_m/gamma + 0.374*gamma/gamma_m + 0.022) 
+
+                    eta[i,:,k] = eta_val * e_freq_norm *  self.mi[k] * self.num_density[k,i] * ai**2
+
+
+            
+        return eta
+
+
+
 
 
 # class MultiSpeciesTrans:
